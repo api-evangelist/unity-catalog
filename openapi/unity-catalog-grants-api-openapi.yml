@@ -1,0 +1,176 @@
+openapi: 3.2.0
+info:
+  title: Unity Catalog Grants API
+  version: '0.1'
+servers:
+- url: http://localhost:8080/api/2.1/unity-catalog
+  description: Localhost reference server
+tags:
+- name: Grants
+paths:
+  /permissions/{securable_type}/{full_name}:
+    parameters:
+    - name: securable_type
+      in: path
+      description: Type of securable.
+      required: true
+      schema:
+        $ref: '#/components/schemas/SecurableType'
+    - name: full_name
+      in: path
+      description: Full name of securable.
+      required: true
+      schema:
+        type: string
+    get:
+      tags:
+      - Grants
+      parameters:
+      - name: principal
+        in: query
+        description: 'If provided, only the permissions for the specified principal (user or group) are returned.
+
+          '
+        schema:
+          type: string
+        required: false
+      operationId: get
+      summary: Get permissions
+      description: Gets the permissions for a securable.
+      responses:
+        '200':
+          description: The permissions list for securable was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PermissionsList'
+    patch:
+      tags:
+      - Grants
+      operationId: update
+      summary: Update a permission
+      description: Updates the permissions for a securable.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePermissions'
+      responses:
+        '200':
+          description: The permissions list for securable was successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PermissionsList'
+components:
+  schemas:
+    PermissionsChange:
+      type: object
+      properties:
+        principal:
+          description: The principal whose privileges we are changing.
+          type: string
+        add:
+          description: The set of privileges to add.
+          type: array
+          items:
+            $ref: '#/components/schemas/Privilege'
+        remove:
+          description: The set of privileges to remove.
+          type: array
+          items:
+            $ref: '#/components/schemas/Privilege'
+      required:
+      - principal
+      - add
+      - remove
+    Privilege:
+      description: The privilege to grant.
+      type: string
+      enum:
+      - CREATE CATALOG
+      - USE CATALOG
+      - CREATE SCHEMA
+      - USE SCHEMA
+      - CREATE TABLE
+      - SELECT
+      - MODIFY
+      - CREATE FUNCTION
+      - EXECUTE
+      - CREATE VOLUME
+      - READ VOLUME
+      - CREATE MODEL
+      - CREATE EXTERNAL LOCATION
+      - READ FILES
+      - WRITE FILES
+      - CREATE EXTERNAL TABLE
+      - CREATE EXTERNAL VOLUME
+      - CREATE MANAGED STORAGE
+      - CREATE STORAGE CREDENTIAL
+      x-enum-descriptions:
+      - 'CREATE CATALOG: Enables users to create new catalogs in a metastore.'
+      - 'USE CATALOG: Required to interact with any object within a catalog.'
+      - 'CREATE SCHEMA: Enables users to create new schemas in a catalog.'
+      - 'USE SCHEMA: Required to interact with any object within a schema.'
+      - 'CREATE TABLE: Allows creating tables or views in a schema.'
+      - 'SELECT: Enables querying tables, views, materialized views.'
+      - 'MODIFY: Enables adding, updating, and deleting data within tables (requires SELECT privilege also).'
+      - 'CREATE FUNCTION: Allows users to create functions or procedures within a schema.'
+      - 'EXECUTE: Permits invoking user-defined functions or loading models for inference.'
+      - 'CREATE VOLUME: Enables creating volumes in a schema.'
+      - 'READ VOLUME: Permits reading files and directories within volumes.'
+      - 'CREATE MODEL: Permits establishing MLflow registered models in a schema.'
+      - 'CREATE EXTERNAL LOCATION: Required privilege on both the metastore and referenced storage credential to create external locations.'
+      - 'READ FILES: Grants direct read access to files in cloud storage configured as external locations.'
+      - 'WRITE FILES: Grants direct write access to files in cloud storage configured as external locations.'
+      - 'CREATE EXTERNAL TABLE: Enables creating external tables through external locations.'
+      - 'CREATE EXTERNAL VOLUME: Enables creating external volumes through external locations.'
+      - 'CREATE MANAGED STORAGE: Allows designating managed storage locations at catalog or schema levels.'
+      - 'CREATE STORAGE CREDENTIAL: Required privilege on the metastore to create storage credentials.'
+    PrivilegeAssignment:
+      type: object
+      properties:
+        principal:
+          description: The principal (user email address or group name).
+          type: string
+        privileges:
+          description: The privileges assigned to the principal.
+          type: array
+          items:
+            $ref: '#/components/schemas/Privilege'
+      required:
+      - principal
+      - privileges
+    SecurableType:
+      type: string
+      enum:
+      - metastore
+      - catalog
+      - schema
+      - table
+      - function
+      - volume
+      - registered_model
+      - external_location
+      - credential
+      description: The type of the resource.
+    PermissionsList:
+      type: object
+      properties:
+        privilege_assignments:
+          description: The privileges assigned to each principal.
+          type: array
+          items:
+            $ref: '#/components/schemas/PrivilegeAssignment'
+      required:
+      - privilege_assignments
+    UpdatePermissions:
+      type: object
+      properties:
+        changes:
+          description: Array of permissions change objects.
+          type: array
+          items:
+            $ref: '#/components/schemas/PermissionsChange'
+      required:
+      - changes

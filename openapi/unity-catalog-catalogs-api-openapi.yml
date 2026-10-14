@@ -1,0 +1,225 @@
+openapi: 3.2.0
+info:
+  title: Unity Catalog Catalogs API
+  version: '0.1'
+  description: A catalog is the first layer of Unity Catalog’s three-level namespace. It’s used to organize your data assets.
+servers:
+- url: http://localhost:8080/api/2.1/unity-catalog
+  description: Localhost reference server
+tags:
+- name: Catalogs
+  description: A catalog is the first layer of Unity Catalog’s three-level namespace. It’s used to organize your data assets.
+paths:
+  /catalogs:
+    post:
+      tags:
+      - Catalogs
+      operationId: createCatalog
+      summary: Create a catalog
+      description: Creates a new catalog instance.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCatalog'
+      responses:
+        '200':
+          description: The new catalog was successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatalogInfo'
+    get:
+      tags:
+      - Catalogs
+      parameters:
+      - name: page_token
+        in: query
+        description: 'Opaque pagination token to go to next page based on previous query.
+
+          '
+        schema:
+          type: string
+        required: false
+      - name: max_results
+        in: query
+        description: 'Maximum number of catalogs to return.
+
+          - when set to a value greater than 0, the page length is the minimum of this value and a server configured value;
+
+          - when set to 0, the page length is set to a server configured value;
+
+          - when set to a value less than 0, an invalid parameter error is returned;
+
+          '
+        schema:
+          type: integer
+          format: int32
+          maximum: 1000
+        required: false
+      operationId: listCatalogs
+      summary: List catalogs
+      description: Lists the available catalogs. There is no guarantee of a specific ordering of the elements in the list.
+      responses:
+        '200':
+          description: The catalog list was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListCatalogsResponse'
+  /catalogs/{name}:
+    parameters:
+    - name: name
+      in: path
+      description: The name of the catalog.
+      required: true
+      schema:
+        type: string
+    get:
+      tags:
+      - Catalogs
+      operationId: getCatalog
+      summary: Get a catalog
+      description: Gets the specified catalog.
+      responses:
+        '200':
+          description: The catalog was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatalogInfo'
+    patch:
+      tags:
+      - Catalogs
+      operationId: updateCatalog
+      summary: Update a catalog
+      description: Updates the catalog that matches the supplied name.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCatalog'
+      responses:
+        '200':
+          description: The catalog was successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatalogInfo'
+    delete:
+      tags:
+      - Catalogs
+      operationId: deleteCatalog
+      summary: Delete a catalog
+      description: Deletes the catalog that matches the supplied name.
+      parameters:
+      - name: force
+        in: query
+        description: Force deletion even if the catalog is not empty.
+        required: false
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: The catalog was successfully deleted.
+          content:
+            application/json:
+              schema: {}
+components:
+  schemas:
+    ListCatalogsResponse:
+      type: object
+      properties:
+        catalogs:
+          description: An array of catalog information objects.
+          type: array
+          items:
+            $ref: '#/components/schemas/CatalogInfo'
+        next_page_token:
+          type: string
+          description: 'Opaque token to retrieve the next page of results. Absent if there are no more pages.
+
+            __page_token__ should be set to this value for the next request (for the next page of results).
+
+            '
+    CreateCatalog:
+      type: object
+      properties:
+        name:
+          description: Name of catalog.
+          type: string
+        comment:
+          description: User-provided free-form text description.
+          type: string
+        properties:
+          $ref: '#/components/schemas/SecurablePropertiesMap'
+        storage_root:
+          description: 'Storage root URL for managed storage location of catalog. Example: s3://bucket/ucroot
+
+            '
+          type: string
+      required:
+      - name
+    SecurablePropertiesMap:
+      description: A map of key-value properties attached to the securable.
+      type: object
+      additionalProperties:
+        type: string
+    UpdateCatalog:
+      type: object
+      properties:
+        comment:
+          description: User-provided free-form text description.
+          type: string
+        properties:
+          $ref: '#/components/schemas/SecurablePropertiesMap'
+        new_name:
+          description: New name for the catalog.
+          type: string
+    CatalogInfo:
+      type: object
+      properties:
+        name:
+          description: Name of catalog.
+          type: string
+        comment:
+          description: User-provided free-form text description.
+          type: string
+        properties:
+          $ref: '#/components/schemas/SecurablePropertiesMap'
+        owner:
+          description: Username of current owner of catalog.
+          type: string
+        created_at:
+          description: Time at which this catalog was created, in epoch milliseconds.
+          type: integer
+          format: int64
+        created_by:
+          description: Username of catalog creator.
+          type: string
+        updated_at:
+          description: Time at which this catalog was last modified, in epoch milliseconds.
+          type: integer
+          format: int64
+        updated_by:
+          description: Username of user who last modified catalog.
+          type: string
+        id:
+          description: Unique identifier for the catalog.
+          type: string
+        storage_root:
+          description: 'Storage root URL for managed storage location of catalog. This can be set when creating
+
+            a catalog. Example: s3://bucket/ucroot
+
+            '
+          type: string
+        storage_location:
+          description: 'Storage Location URL (full path) for managed storage location of catalog. This is an
+
+            automatically generated unique path under storage_root.
+
+            Example: s3://bucket/ucroot/__unitystorage/catalogs/{catalog_id}
+
+            '
+          type: string

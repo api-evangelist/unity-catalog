@@ -1,0 +1,454 @@
+openapi: 3.2.0
+info:
+  title: Unity Catalog Tables API
+  version: '0.1'
+  description: 'A table resides in the third layer of Unity Catalog’s three-level namespace. It contains rows of data.
+
+    A table can be managed or external.'
+servers:
+- url: http://localhost:8080/api/2.1/unity-catalog
+  description: Localhost reference server
+tags:
+- name: Tables
+  description: 'A table resides in the third layer of Unity Catalog’s three-level namespace. It contains rows of data.
+
+    A table can be managed or external.'
+paths:
+  /staging-tables:
+    post:
+      operationId: createStagingTable
+      summary: Create a staging table
+      tags:
+      - Tables
+      description: 'Creates a new staging table instance. Staging tables are used during managed table creation. Creating a managed
+
+        table requires performing two actions – initializing the table data in cloud storage and creating the named
+
+        table entry in the catalog – and these should appear as an atomic operation to other operations on catalog
+
+        tables. A staging table is used to allocate storage for the managed table, and the catalog_name.schema_name.name
+
+        parameters provided in this request are used to initialize any required storage properties and determine the
+
+        storage URL that should be used for the data contained by this table.
+
+
+        Temporary credentials can be obtained as though the staging table were a regular table to get access to the
+
+        staging table’s storage. After the table’s data is initialized, the staging table is “promoted” to a managed
+
+        table by creating a managed table with the same location as the staging table. This allows for the atomic
+
+        creation of a managed table that already has full data written to its storage location. Note: the name provided
+
+        must match the name used to initialize the staging table originally.
+
+
+        WARNING: This API is experimental and may change in future versions.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateStagingTable'
+      responses:
+        '200':
+          description: The new staging table was successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StagingTableInfo'
+  /tables:
+    post:
+      operationId: createTable
+      summary: Create a table.
+      tags:
+      - Tables
+      description: 'Creates a new external table instance.
+
+        WARNING: This API is experimental and will change in future versions.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTable'
+      responses:
+        '200':
+          description: The new external table was successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TableInfo'
+    get:
+      tags:
+      - Tables
+      parameters:
+      - name: catalog_name
+        in: query
+        description: Name of parent catalog for tables of interest.
+        required: true
+        schema:
+          type: string
+      - name: schema_name
+        in: query
+        description: Parent schema of tables.
+        required: true
+        schema:
+          type: string
+      - name: max_results
+        in: query
+        description: 'Maximum number of tables to return.
+
+          - when set to a value greater than 0, the page length is the minimum of this value and a server configured value;
+
+          - when set to 0, the page length is set to a server configured value;
+
+          - when set to a value less than 0, an invalid parameter error is returned;
+
+          '
+        required: false
+        schema:
+          type: integer
+          format: int32
+          maximum: 50
+      - name: page_token
+        in: query
+        description: Opaque token to send for the next page of results (pagination).
+        required: false
+        schema:
+          type: string
+      operationId: listTables
+      summary: List tables
+      description: 'Gets the list of all available tables under the parent catalog and schema.
+
+        There is no guarantee of a specific ordering of the elements in the array.'
+      responses:
+        '200':
+          description: The tables list was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListTablesResponse'
+  /tables/{full_name}:
+    parameters:
+    - name: full_name
+      in: path
+      description: Full name of the table.
+      required: true
+      schema:
+        type: string
+    get:
+      tags:
+      - Tables
+      operationId: getTable
+      summary: Get a table
+      description: Gets a table for a specific catalog and schema.
+      parameters:
+      - name: read_streaming_table_as_managed
+        in: query
+        description: 'Whether to read Streaming Tables as Managed tables.
+
+          '
+        required: false
+        schema:
+          type: boolean
+          default: true
+      - name: read_materialized_view_as_managed
+        in: query
+        description: 'Whether to read Materialized Views as Managed tables.
+
+          '
+        required: false
+        schema:
+          type: boolean
+          default: true
+      responses:
+        '200':
+          description: The table was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TableInfo'
+    delete:
+      tags:
+      - Tables
+      operationId: deleteTable
+      summary: Delete a table
+      description: Deletes a table from the specified parent catalog and schema.
+      responses:
+        '200':
+          description: The table was successfully deleted.
+          content:
+            application/json:
+              schema: {}
+components:
+  schemas:
+    ListTablesResponse:
+      type: object
+      properties:
+        tables:
+          description: An array of table information objects.
+          type: array
+          items:
+            $ref: '#/components/schemas/TableInfo'
+        next_page_token:
+          description: 'Opaque token to retrieve the next page of results. Absent if there are no more pages.
+
+            __page_token__ should be set to this value for the next request (for the next page of results).
+
+            '
+          type: string
+    DependencyList:
+      description: A list of dependencies.
+      type: object
+      properties:
+        dependencies:
+          description: Array of dependencies.
+          type: array
+          items:
+            $ref: '#/components/schemas/Dependency'
+    FunctionDependency:
+      description: A function that is dependent on a SQL object.
+      type: object
+      required:
+      - function_full_name
+      properties:
+        function_full_name:
+          description: Full name of the dependent function, in the form of __catalog_name__.__schema_name__.__function_name__.
+          type: string
+    CreateTable:
+      type: object
+      properties:
+        name:
+          description: Name of table, relative to parent schema.
+          type: string
+        catalog_name:
+          description: Name of parent catalog.
+          type: string
+        schema_name:
+          description: Name of parent schema relative to its parent catalog.
+          type: string
+        table_type:
+          $ref: '#/components/schemas/TableType'
+        data_source_format:
+          $ref: '#/components/schemas/DataSourceFormat'
+        columns:
+          description: The array of __ColumnInfo__ definitions of the table's columns.
+          type: array
+          items:
+            $ref: '#/components/schemas/ColumnInfo'
+        storage_location:
+          description: Storage root URL for external table
+          type: string
+        comment:
+          description: User-provided free-form text description.
+          type: string
+        properties:
+          $ref: '#/components/schemas/SecurablePropertiesMap'
+        view_definition:
+          description: Definition text for view-like table types such as VIEW, MATERIALIZED_VIEW, STREAMING_TABLE, and METRIC_VIEW. The format depends on the table type (SQL for views, YAML for metric views).
+          type: string
+        view_dependencies:
+          $ref: '#/components/schemas/DependencyList'
+      required:
+      - name
+      - catalog_name
+      - schema_name
+      - table_type
+      - columns
+    TableInfo:
+      type: object
+      properties:
+        name:
+          description: Name of table, relative to parent schema.
+          type: string
+        catalog_name:
+          description: Name of parent catalog.
+          type: string
+        schema_name:
+          description: Name of parent schema relative to its parent catalog.
+          type: string
+        table_type:
+          $ref: '#/components/schemas/TableType'
+        data_source_format:
+          $ref: '#/components/schemas/DataSourceFormat'
+        columns:
+          description: The array of __ColumnInfo__ definitions of the table's columns.
+          type: array
+          items:
+            $ref: '#/components/schemas/ColumnInfo'
+        storage_location:
+          description: Storage root URL for table (for **MANAGED**, **EXTERNAL** tables)
+          type: string
+        comment:
+          description: User-provided free-form text description.
+          type: string
+        properties:
+          $ref: '#/components/schemas/SecurablePropertiesMap'
+        owner:
+          description: Username of current owner of table.
+          type: string
+        created_at:
+          description: Time at which this table was created, in epoch milliseconds.
+          type: integer
+          format: int64
+        created_by:
+          description: Username of table creator.
+          type: string
+        updated_at:
+          description: Time at which this table was last modified, in epoch milliseconds.
+          type: integer
+          format: int64
+        updated_by:
+          description: Username of user who last modified the table.
+          type: string
+        table_id:
+          description: Unique identifier for the table.
+          type: string
+        view_definition:
+          description: Definition text for view-like table types such as VIEW, MATERIALIZED_VIEW, STREAMING_TABLE, and METRIC_VIEW. The format depends on the table type (SQL for views, YAML for metric views).
+          type: string
+        view_dependencies:
+          $ref: '#/components/schemas/DependencyList'
+    Dependency:
+      description: A dependency of a SQL object. Either the __table__ field or the __function__ field must be defined.
+      type: object
+      properties:
+        table:
+          $ref: '#/components/schemas/TableDependency'
+        function:
+          $ref: '#/components/schemas/FunctionDependency'
+    ColumnInfo:
+      type: object
+      properties:
+        name:
+          description: Name of Column.
+          type: string
+        type_text:
+          description: Full data type specification as SQL/catalogString text.
+          type: string
+        type_json:
+          description: Full data type specification, JSON-serialized.
+          type: string
+        type_name:
+          $ref: '#/components/schemas/ColumnTypeName'
+        type_precision:
+          description: Digits of precision; required for DecimalTypes.
+          type: integer
+          format: int32
+        type_scale:
+          description: Digits to right of decimal; Required for DecimalTypes.
+          type: integer
+          format: int32
+        type_interval_type:
+          description: Format of IntervalType.
+          type: string
+        position:
+          description: Ordinal position of column (starting at position 0).
+          type: integer
+          format: int32
+        comment:
+          description: User-provided free-form text description.
+          type: string
+        nullable:
+          description: Whether field may be Null.
+          type: boolean
+          default: 'true'
+        partition_index:
+          description: Partition index for column.
+          type: integer
+          format: int32
+    SecurablePropertiesMap:
+      description: A map of key-value properties attached to the securable.
+      type: object
+      additionalProperties:
+        type: string
+    DataSourceFormat:
+      description: Data source format
+      type: string
+      enum:
+      - DELTA
+      - ICEBERG
+      - CSV
+      - JSON
+      - AVRO
+      - PARQUET
+      - ORC
+      - TEXT
+    TableType:
+      type: string
+      enum:
+      - MANAGED
+      - EXTERNAL
+      - STREAMING_TABLE
+      - MATERIALIZED_VIEW
+      - METRIC_VIEW
+      - VIEW
+    StagingTableInfo:
+      type: object
+      properties:
+        name:
+          description: Name of table, relative to parent schema.
+          type: string
+        catalog_name:
+          description: Name of parent catalog.
+          type: string
+        schema_name:
+          description: Name of parent schema relative to its parent catalog.
+          type: string
+        id:
+          description: Unique identifier for the table.
+          type: string
+        staging_location:
+          description: URI generated for the staging table
+          type: string
+    TableDependency:
+      description: A table that is dependent on a SQL object.
+      type: object
+      required:
+      - table_full_name
+      properties:
+        table_full_name:
+          description: Full name of the dependent table, in the form of __catalog_name__.__schema_name__.__table_name__.
+          type: string
+    ColumnTypeName:
+      description: Name of type (INT, STRUCT, MAP, etc.).
+      type: string
+      enum:
+      - BOOLEAN
+      - BYTE
+      - SHORT
+      - INT
+      - LONG
+      - FLOAT
+      - DOUBLE
+      - DATE
+      - TIMESTAMP
+      - TIMESTAMP_NTZ
+      - STRING
+      - BINARY
+      - DECIMAL
+      - INTERVAL
+      - ARRAY
+      - STRUCT
+      - MAP
+      - VARIANT
+      - CHAR
+      - 'NULL'
+      - USER_DEFINED_TYPE
+      - TABLE_TYPE
+    CreateStagingTable:
+      type: object
+      properties:
+        name:
+          description: Name of table, relative to parent schema.
+          type: string
+        catalog_name:
+          description: Name of parent catalog.
+          type: string
+        schema_name:
+          description: Name of parent schema relative to its parent catalog.
+          type: string
+      required:
+      - name
+      - catalog_name
+      - schema_name

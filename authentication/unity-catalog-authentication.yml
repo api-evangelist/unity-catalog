@@ -1,0 +1,24 @@
+generated: '2026-10-13'
+method: searched
+generator: extract-docs-artifacts.py (local)
+source: https://docs.unitycatalog.io/server/auth/
+sources:
+- https://docs.unitycatalog.io/server/auth/
+- https://docs.unitycatalog.io/server/google-auth/
+- https://docs.unitycatalog.io/quickstart/
+- https://docs.unitycatalog.io/ai/quickstart/
+description: Authentication uses Google OAuth2 as configured in the Unity Catalog server.
+schemes:
+- type: oauth2
+  name: Google OAuth
+  evidence: server.authorization-url =https://accounts.google.com/o/oauth2/auth
+  flows:
+  - authorization_code
+  authorize_url: https://accounts.google.com/o/oauth2/auth
+  scopes:
+  - openid
+  - profile
+  - email
+  how_to_obtain: Obtain a client ID and client secret from Google Cloud Console and set them in etc/conf/server.properties (server.client-id and
+    server.client-secret).
+docs: https://docs.unitycatalog.io/server/auth/

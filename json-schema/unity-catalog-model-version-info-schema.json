@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/unity-catalog/main/json-schema/unity-catalog-model-version-info-schema.json",
+  "title": "ModelVersionInfo",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/unitycatalog-all.yaml#/components/schemas/ModelVersionInfo",
+  "type": "object",
+  "properties": {
+    "model_name": {
+      "description": "The name of the parent registered model of the model version, relative to parent schema",
+      "type": "string"
+    },
+    "catalog_name": {
+      "description": "The name of the catalog containing the model version",
+      "type": "string"
+    },
+    "schema_name": {
+      "description": "The name of the schema containing the model version, relative to parent catalog",
+      "type": "string"
+    },
+    "version": {
+      "description": "Integer model version number, used to reference the model version in API requests.",
+      "type": "integer",
+      "format": "int64"
+    },
+    "source": {
+      "description": "URI indicating the location of the source artifacts (files) for the model version",
+      "type": "string"
+    },
+    "run_id": {
+      "description": "The run id used by the ML package that generated the model.",
+      "type": "string"
+    },
+    "status": {
+      "$ref": "#/$defs/ModelVersionStatus"
+    },
+    "storage_location": {
+      "description": "The storage location on the cloud under which model version data files are stored",
+      "type": "string"
+    },
+    "comment": {
+      "description": "The comment attached to the model version",
+      "type": "string"
+    },
+    "created_at": {
+      "description": "Time at which this model version was created, in epoch milliseconds.",
+      "type": "integer",
+      "format": "int64"
+    },
+    "created_by": {
+      "description": "The identifier of the user who created the model version",
+      "type": "string"
+    },
+    "updated_at": {
+      "description": "Time at which this model version was last modified, in epoch milliseconds.",
+      "type": "integer",
+      "format": "int64"
+    },
+    "updated_by": {
+      "description": "The identifier of the user who updated the model version last time",
+      "type": "string"
+    },
+    "id": {
+      "description": "Unique identifier for the model version.",
+      "type": "string"
+    }
+  },
+  "$defs": {
+    "ModelVersionStatus": {
+      "description": "All possible model version statuses.",
+      "type": "string",
+      "enum": [
+        "MODEL_VERSION_STATUS_UNKNOWN",
+        "PENDING_REGISTRATION",
+        "FAILED_REGISTRATION",
+        "READY"
+      ],
+      "x-enum-descriptions": [
+        "MODEL_VERSION_STATUS_UNKNOWN: Unknown",
+        "PENDING_REGISTRATION: Indicates that the client has not completely written all model artifacts to external storage.",
+        "FAILED_REGISTRATION: Indicates that the client has failed to write all model artifacts to external storage.",
+        "READY: Indicates that the client has successfully written all model artifacts to external storage."
+      ]
+    }
+  }
+}

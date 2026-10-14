@@ -1,0 +1,249 @@
+openapi: 3.2.0
+info:
+  title: Unity Catalog Schemas API
+  version: '0.1'
+  description: A schema (also called a database) is the second layer of Unity Catalog’s three-level namespace. A schema organizes tables, volumes and functions.
+servers:
+- url: http://localhost:8080/api/2.1/unity-catalog
+  description: Localhost reference server
+tags:
+- name: Schemas
+  description: A schema (also called a database) is the second layer of Unity Catalog’s three-level namespace. A schema organizes tables, volumes and functions.
+paths:
+  /schemas:
+    post:
+      tags:
+      - Schemas
+      operationId: createSchema
+      summary: Create a schema
+      description: Creates a new schema in the specified catalog.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSchema'
+      responses:
+        '200':
+          description: The new schema was successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SchemaInfo'
+    get:
+      tags:
+      - Schemas
+      parameters:
+      - name: catalog_name
+        in: query
+        description: Parent catalog for schemas of interest.
+        required: true
+        schema:
+          type: string
+      - name: max_results
+        in: query
+        description: 'Maximum number of schemas to return.
+
+          - when set to a value greater than 0, the page length is the minimum of this value and a server configured value;
+
+          - when set to 0, the page length is set to a server configured value;
+
+          - when set to a value less than 0, an invalid parameter error is returned;
+
+          '
+        schema:
+          type: integer
+          format: int32
+          maximum: 1000
+        required: false
+      - name: page_token
+        in: query
+        description: 'Opaque pagination token to go to next page based on previous query.
+
+          '
+        schema:
+          type: string
+        required: false
+      operationId: listSchemas
+      summary: List schemas
+      description: 'Gets an array of schemas for a catalog.
+
+        There is no guarantee of a specific ordering of the elements in the array.'
+      responses:
+        '200':
+          description: The schemas list was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListSchemasResponse'
+  /schemas/{full_name}:
+    parameters:
+    - name: full_name
+      in: path
+      description: Full name of the schema.
+      required: true
+      schema:
+        type: string
+    get:
+      tags:
+      - Schemas
+      operationId: getSchema
+      summary: Get a schema
+      description: Gets the specified schema for a catalog.
+      responses:
+        '200':
+          description: The schema was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SchemaInfo'
+    patch:
+      tags:
+      - Schemas
+      operationId: updateSchema
+      summary: Update a schema
+      description: Updates the specified schema.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSchema'
+      responses:
+        '200':
+          description: The schema was successfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SchemaInfo'
+    delete:
+      tags:
+      - Schemas
+      operationId: deleteSchema
+      summary: Delete a schema
+      description: Deletes the specified schema from the parent catalog.
+      parameters:
+      - name: force
+        in: query
+        description: Force deletion even if the catalog is not empty.
+        required: false
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: The schema was successfully deleted.
+          content:
+            application/json:
+              schema: {}
+components:
+  schemas:
+    UpdateSchema:
+      type: object
+      properties:
+        comment:
+          description: User-provided free-form text description.
+          type: string
+        properties:
+          $ref: '#/components/schemas/SecurablePropertiesMap'
+        new_name:
+          description: New name for the schema.
+          type: string
+    ListSchemasResponse:
+      type: object
+      properties:
+        schemas:
+          description: An array of schema information objects.
+          type: array
+          items:
+            $ref: '#/components/schemas/SchemaInfo'
+        next_page_token:
+          type: string
+          description: 'Opaque token to retrieve the next page of results. Absent if there are no more pages.
+
+            __page_token__ should be set to this value for the next request (for the next page of results).
+
+            '
+    SecurablePropertiesMap:
+      description: A map of key-value properties attached to the securable.
+      type: object
+      additionalProperties:
+        type: string
+    SchemaInfo:
+      type: object
+      properties:
+        name:
+          description: Name of schema, relative to parent catalog.
+          type: string
+        catalog_name:
+          description: Name of parent catalog.
+          type: string
+        comment:
+          description: User-provided free-form text description.
+          type: string
+        properties:
+          $ref: '#/components/schemas/SecurablePropertiesMap'
+        full_name:
+          description: Full name of schema, in form of __catalog_name__.__schema_name__.
+          type: string
+        owner:
+          description: Username of current owner of schema.
+          type: string
+        created_at:
+          description: Time at which this schema was created, in epoch milliseconds.
+          type: integer
+          format: int64
+        created_by:
+          description: Username of schema creator.
+          type: string
+        updated_at:
+          description: Time at which this schema was last modified, in epoch milliseconds.
+          type: integer
+          format: int64
+        updated_by:
+          description: Username of user who last modified schema.
+          type: string
+        schema_id:
+          description: Unique identifier for the schema.
+          type: string
+        storage_root:
+          description: 'Storage root URL for managed storage location of schema. This can be set when creating a
+
+            schema. Example: s3://bucket/ucroot
+
+            '
+          type: string
+        storage_location:
+          description: 'Storage Location URL (full path) for managed storage location of schema. This is an
+
+            automatically generated unique path under storage_root. If it is absent, managed
+
+            securables under this schema will try to use storage_location of the parent catalog
+
+            instead. Example: s3://bucket/ucroot/__unitystorage/schemas/{schema_id}
+
+            '
+          type: string
+    CreateSchema:
+      type: object
+      properties:
+        name:
+          description: Name of schema, relative to parent catalog.
+          type: string
+        catalog_name:
+          description: Name of parent catalog.
+          type: string
+        comment:
+          description: User-provided free-form text description.
+          type: string
+        properties:
+          $ref: '#/components/schemas/SecurablePropertiesMap'
+        storage_root:
+          description: 'Storage root URL for managed storage location of schema. If not set, managed securables
+
+            under this schema will try to use the storage_location of the parent catalog instead.
+
+            Example: s3://bucket/ucroot
+
+            '
+          type: string
+      required:
+      - name
+      - catalog_name

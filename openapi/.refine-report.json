@@ -1,0 +1,34 @@
+{
+  "provider": "unity-catalog",
+  "sources": [
+    "unitycatalog-all.yaml"
+  ],
+  "outputs": [
+    "unity-catalog-catalogs-api-openapi.yml",
+    "unity-catalog-credentials-api-openapi.yml",
+    "unity-catalog-deltacommits-api-openapi.yml",
+    "unity-catalog-external-locations-api-openapi.yml",
+    "unity-catalog-functions-api-openapi.yml",
+    "unity-catalog-grants-api-openapi.yml",
+    "unity-catalog-metastores-api-openapi.yml",
+    "unity-catalog-modelversions-api-openapi.yml",
+    "unity-catalog-registeredmodels-api-openapi.yml",
+    "unity-catalog-schemas-api-openapi.yml",
+    "unity-catalog-tables-api-openapi.yml",
+    "unity-catalog-temporarycredentials-api-openapi.yml",
+    "unity-catalog-volumes-api-openapi.yml"
+  ],
+  "archived": [
+    "archived openapi/unitycatalog-all.yaml"
+  ],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "unitycatalog-all.yaml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
+    "unitycatalog-all.yaml: declared missing tag: Credentials",
+    "unitycatalog-all.yaml: declared missing tag: External Locations",
+    "unitycatalog-all.yaml: declared missing tag: Grants",
+    "apis.yml register: written (+13 apis, 13 total)"
+  ],
+  "skipped": []
+}

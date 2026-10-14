@@ -1,23 +1,407 @@
 aid: unity-catalog
+
 name: Unity Catalog
-description: 'Unity Catalog is a company surfaced via the API Evangelist harvest backlog (source: tag-qc)
-  and added to the network as a stub for full-pipeline profiling.'
+
+image: https://unitycatalog.netlify.app/images/default-image.jpg
+
+description: Unity Catalog provides an industry‑first universal catalog for data and AI, enabling organizations to manage, discover, and govern
+  data assets across multiple formats, engines, and environments. The platform offers multimodal interfaces, extensive integrations with tools
+  like Spark, DuckDB, and LangChain, and supports AI workloads through dedicated APIs. It includes features for tables, functions, models, and
+  user privileges, along with robust security and governance capabilities.
+
 url: https://raw.githubusercontent.com/api-evangelist/unity-catalog/refs/heads/main/apis.yml
+
 x-type: company
+
 x-source: harvest:tag-qc
-x-tier: stub
-x-tier-reason: harvest
+
+x-tier: profiled
+x-tier-reason: enrichment pass 2026-10-13 (modular-v1; was harvest)
+
 specificationVersion: '0.20'
+
 created: '2026-10-13'
+
 modified: '2026-10-13'
+
 tags:
-- Company
-apis: []
+- Data
+- AI
+- Catalog
+- Governance
+- Multimodal
+
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+
 common:
+- type: AgenticAccess
+  url: agentic-access/unity-catalog-agentic-access.yml
+- type: Spectral
+  url: rules/unity-catalog-rules.yml
+- type: JSONLD
+  url: json-ld/unity-catalog-context.jsonld
+- type: Vocabulary
+  url: vocabulary/unity-catalog-vocabulary.yml
+- type: DataModel
+  url: data-model/unity-catalog-data-model.yml
+- type: Authentication
+  url: authentication/unity-catalog-authentication.yml
+- type: ErrorCatalog
+  url: errors/unity-catalog-problem-types.yml
+- type: Conformance
+  url: conformance/unity-catalog-conformance.yml
+- type: Hosts
+  url: hosts/unity-catalog-hosts.yml
+- type: Vendors
+  url: vendors/unity-catalog-vendors.yml
+- type: GettingStarted
+  url: https://docs.unitycatalog.io/quickstart/
+- type: DomainSecurity
+  url: security/unity-catalog-domain-security.yml
 - type: Website
   url: https://www.unitycatalog.io
+- type: Documentation
+  url: https://docs.unitycatalog.io
+- type: APIReference
+  url: https://go.unitycatalog.io/apidocs
+- type: Blog
+  url: https://unitycatalog.io/blogs
+- type: GitHubOrganization
+  url: https://github.com/unitycatalog
+- type: SlackCommunity
+  url: https://join.slack.com/t/unitycatalog/shared_invite/zt-3f93k8flt-Ent43H6MQQYNN52Ca_eRMQ
+- type: LinkedIn
+  url: https://www.linkedin.com/company/unitycatalog
+
+apis:
+- aid: unity-catalog:unity-catalog-catalogs-api
+  name: Unity Catalog Catalogs API
+  description: >-
+    A catalog is the first layer of Unity Catalog’s three-level namespace. It’s used to organize your
+    data assets.
+  humanURL: https://go.unitycatalog.io/apidocs
+  baseURL: https://api.unitycatalog.io
+  tags:
+  - Catalogs
+  properties:
+  - type: OpenAPI
+    url: openapi/unity-catalog-catalogs-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/unity-catalog-function-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-table-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-delta-commit-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-model-version-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-schema-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-registered-model-info-schema.json
+- aid: unity-catalog:unity-catalog-credentials-api
+  name: Unity Catalog Credentials API
+  description: The Credentials API from Unity Catalog — 2 operation(s) for credentials.
+  humanURL: https://go.unitycatalog.io/apidocs
+  baseURL: https://api.unitycatalog.io
+  tags:
+  - Credentials
+  properties:
+  - type: OpenAPI
+    url: openapi/unity-catalog-credentials-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/unity-catalog-function-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-table-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-delta-commit-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-model-version-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-schema-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-registered-model-info-schema.json
+- aid: unity-catalog:unity-catalog-deltacommits-api
+  name: Unity Catalog Delta Commits API
+  description: >-
+    "Delta commits" is a Delta tables feature that allows Delta tables to designate a coordinator to coordinate
+    commits. This is Unity Catalog's API to allow Unity Catalog be the commit coordinator for managed
+    tables. (See https://github.com/delta-io/delta/blob/master/protocol_rfcs/catalog-managed.md for more
+    details)
+  humanURL: https://go.unitycatalog.io/apidocs
+  baseURL: https://api.unitycatalog.io
+  tags:
+  - DeltaCommits
+  properties:
+  - type: OpenAPI
+    url: openapi/unity-catalog-deltacommits-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/unity-catalog-function-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-table-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-delta-commit-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-model-version-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-schema-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-registered-model-info-schema.json
+- aid: unity-catalog:unity-catalog-external-locations-api
+  name: Unity Catalog External Locations API
+  description: The External Locations API from Unity Catalog — 2 operation(s) for external locations.
+  humanURL: https://go.unitycatalog.io/apidocs
+  baseURL: https://api.unitycatalog.io
+  tags:
+  - External Locations
+  properties:
+  - type: OpenAPI
+    url: openapi/unity-catalog-external-locations-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/unity-catalog-function-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-table-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-delta-commit-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-model-version-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-schema-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-registered-model-info-schema.json
+- aid: unity-catalog:unity-catalog-functions-api
+  name: Unity Catalog Functions API
+  description: >-
+    Functions implement User-Defined Functions (UDFs) in Unity Catalog.
+
+    The function implementation can be a SQL expression/query or a python function, and it can be invoked
+    wherever a table reference is allowed in a query.
+
+    In Unity Catalog, a function resides at the same level as a table, so it can be referenced with the
+    form __catalog_name__.__schema_name__.__function_name__.
+  humanURL: https://go.unitycatalog.io/apidocs
+  baseURL: https://api.unitycatalog.io
+  tags:
+  - Functions
+  properties:
+  - type: OpenAPI
+    url: openapi/unity-catalog-functions-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/unity-catalog-function-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-table-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-delta-commit-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-model-version-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-schema-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-registered-model-info-schema.json
+- aid: unity-catalog:unity-catalog-grants-api
+  name: Unity Catalog Grants API
+  description: The Grants API from Unity Catalog — 1 operation(s) for grants.
+  humanURL: https://go.unitycatalog.io/apidocs
+  baseURL: https://api.unitycatalog.io
+  tags:
+  - Grants
+  properties:
+  - type: OpenAPI
+    url: openapi/unity-catalog-grants-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/unity-catalog-function-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-table-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-delta-commit-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-model-version-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-schema-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-registered-model-info-schema.json
+- aid: unity-catalog:unity-catalog-metastores-api
+  name: Unity Catalog Metastores API
+  description: >-
+    A metastore is the top-level container of objects in Unity Catalog that stores all UC assets.
+  humanURL: https://go.unitycatalog.io/apidocs
+  baseURL: https://api.unitycatalog.io
+  tags:
+  - Metastores
+  properties:
+  - type: OpenAPI
+    url: openapi/unity-catalog-metastores-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/unity-catalog-function-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-table-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-delta-commit-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-model-version-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-schema-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-registered-model-info-schema.json
+- aid: unity-catalog:unity-catalog-schemas-api
+  name: Unity Catalog Schemas API
+  description: >-
+    A schema (also called a database) is the second layer of Unity Catalog’s three-level namespace. A
+    schema organizes tables, volumes and functions.
+  humanURL: https://go.unitycatalog.io/apidocs
+  baseURL: https://api.unitycatalog.io
+  tags:
+  - Schemas
+  properties:
+  - type: OpenAPI
+    url: openapi/unity-catalog-schemas-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/unity-catalog-function-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-table-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-delta-commit-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-model-version-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-schema-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-registered-model-info-schema.json
+- aid: unity-catalog:unity-catalog-tables-api
+  name: Unity Catalog Tables API
+  description: "A table resides in the third layer of Unity Catalog’s three-level namespace. It contains\
+    \ rows of data. \nA table can be managed or external."
+  humanURL: https://go.unitycatalog.io/apidocs
+  baseURL: https://api.unitycatalog.io
+  tags:
+  - Tables
+  properties:
+  - type: OpenAPI
+    url: openapi/unity-catalog-tables-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/unity-catalog-function-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-table-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-delta-commit-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-model-version-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-schema-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-registered-model-info-schema.json
+- aid: unity-catalog:unity-catalog-temporarycredentials-api
+  name: Unity Catalog Temporary Credentials API
+  description: >-
+    Temporary credentials are used to access storage locations or assets for a limited lifetime.
+  humanURL: https://go.unitycatalog.io/apidocs
+  baseURL: https://api.unitycatalog.io
+  tags:
+  - TemporaryCredentials
+  properties:
+  - type: OpenAPI
+    url: openapi/unity-catalog-temporarycredentials-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/unity-catalog-function-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-table-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-delta-commit-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-model-version-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-schema-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-registered-model-info-schema.json
+- aid: unity-catalog:unity-catalog-volumes-api
+  name: Unity Catalog Volumes API
+  description: >-
+    Volumes are a Unity Catalog capability for accessing, storing, governing, organizing and processing
+    files. Use cases include running machine learning on unstructured data such as image, audio, video,
+    or PDF files, organizing data sets during the data exploration stages in data science, working with
+    libraries that require access to the local file system on cluster machines, storing library and config
+    files of arbitrary formats such as .whl or .txt centrally and providing secure access across workspaces
+    to it, or transforming and querying non-tabular data files in ETL.
+  humanURL: https://go.unitycatalog.io/apidocs
+  baseURL: https://api.unitycatalog.io
+  tags:
+  - Volumes
+  properties:
+  - type: OpenAPI
+    url: openapi/unity-catalog-volumes-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/unity-catalog-function-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-table-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-delta-commit-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-model-version-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-schema-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-registered-model-info-schema.json
+- aid: unity-catalog:unity-catalog-model-versions-api
+  name: Unity Catalog Model Versions API
+  description: >-
+    Model versions contain all artifact files associated with an individual machine learning model. They
+    are associated with a single parent model and have an integer identifier, indicating the version number
+    of the model.
+
+    Model versions are referenced via model URI's using the Unity Catalog three-level namespace of the
+    registered model and the version identifier.
+  humanURL: https://go.unitycatalog.io/apidocs
+  baseURL: https://api.unitycatalog.io
+  tags:
+  - Model Versions
+  properties:
+  - type: OpenAPI
+    url: openapi/unity-catalog-model-versions-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/unity-catalog-function-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-table-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-delta-commit-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-model-version-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-schema-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-registered-model-info-schema.json
+- aid: unity-catalog:unity-catalog-registered-models-api
+  name: Unity Catalog Registered Models API
+  description: >-
+    Registered models are machine learning models that are stored within the Unity Catalog model registry.
+    They are comprised of all versions of a single model that a user wishes to keep.
+
+    A registered model resides in the third layer of Unity Catalog’s three-level namespace, and can be
+    referenced with the form __catalog_name__.__schema_name__.__model_name__.
+  humanURL: https://go.unitycatalog.io/apidocs
+  baseURL: https://api.unitycatalog.io
+  tags:
+  - Registered Models
+  properties:
+  - type: OpenAPI
+    url: openapi/unity-catalog-registered-models-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/unity-catalog-function-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-table-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-delta-commit-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-model-version-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-schema-info-schema.json
+  - type: JSONSchema
+    url: json-schema/unity-catalog-registered-model-info-schema.json
+x-enrichment:
+  date: '2026-10-13'
+  status: enriched
+  artifacts_added: 22
+  pass: modular-v1
+  engine: identity=local,contract=local,surfaces=local,docs=local,regulatory=local

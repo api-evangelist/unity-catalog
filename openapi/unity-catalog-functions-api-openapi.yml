@@ -1,0 +1,446 @@
+openapi: 3.2.0
+info:
+  title: Unity Catalog Functions API
+  version: '0.1'
+  description: 'Functions implement User-Defined Functions (UDFs) in Unity Catalog.
+
+    The function implementation can be a SQL expression/query or a python function, and it can be invoked wherever a table reference is allowed in a query.
+
+    In Unity Catalog, a function resides at the same level as a table, so it can be referenced with the form __catalog_name__.__schema_name__.__function_name__.'
+servers:
+- url: http://localhost:8080/api/2.1/unity-catalog
+  description: Localhost reference server
+tags:
+- name: Functions
+  description: 'Functions implement User-Defined Functions (UDFs) in Unity Catalog.
+
+    The function implementation can be a SQL expression/query or a python function, and it can be invoked wherever a table reference is allowed in a query.
+
+    In Unity Catalog, a function resides at the same level as a table, so it can be referenced with the form __catalog_name__.__schema_name__.__function_name__.'
+paths:
+  /functions:
+    post:
+      tags:
+      - Functions
+      operationId: createFunction
+      summary: Create a function.
+      description: 'Creates a new function instance.
+
+        WARNING: This API is experimental and will change in future versions.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateFunctionRequest'
+      responses:
+        '200':
+          description: The new function was successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FunctionInfo'
+    get:
+      tags:
+      - Functions
+      parameters:
+      - name: catalog_name
+        in: query
+        description: Name of parent catalog for functions of interest.
+        required: true
+        schema:
+          type: string
+      - name: schema_name
+        in: query
+        description: Parent schema of functions.
+        required: true
+        schema:
+          type: string
+      - name: max_results
+        in: query
+        description: 'Maximum number of functions to return.
+
+          - when set to a value greater than 0, the page length is the minimum of this value and a server configured value;
+
+          - when set to 0, the page length is set to a server configured value;
+
+          - when set to a value less than 0, an invalid parameter error is returned;
+
+          '
+        schema:
+          type: integer
+          format: int32
+          maximum: 1000
+        required: false
+      - name: page_token
+        in: query
+        description: Opaque pagination token to go to next page based on previous query.
+        schema:
+          type: string
+        required: false
+      operationId: listFunctions
+      summary: List functions
+      description: 'List functions within the specified parent catalog and schema.
+
+        There is no guarantee of a specific ordering of the elements in the array.'
+      responses:
+        '200':
+          description: The function list was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListFunctionsResponse'
+  /functions/{name}:
+    parameters:
+    - name: name
+      in: path
+      description: The fully-qualified name of the function (of the form __catalog_name__.__schema_name__.__function__name__).
+      required: true
+      schema:
+        type: string
+    get:
+      tags:
+      - Functions
+      parameters: []
+      operationId: getFunction
+      summary: Get a function
+      description: Gets a function from within a parent catalog and schema.
+      responses:
+        '200':
+          description: The function was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FunctionInfo'
+    delete:
+      tags:
+      - Functions
+      operationId: deleteFunction
+      summary: Delete a function
+      description: Deletes the function that matches the supplied name.
+      responses:
+        '200':
+          description: The function was successfully deleted.
+          content:
+            application/json:
+              schema: {}
+components:
+  schemas:
+    DependencyList:
+      description: A list of dependencies.
+      type: object
+      properties:
+        dependencies:
+          description: Array of dependencies.
+          type: array
+          items:
+            $ref: '#/components/schemas/Dependency'
+    FunctionParameterInfo:
+      type: object
+      required:
+      - name
+      - type_text
+      - type_name
+      - type_json
+      - position
+      properties:
+        name:
+          description: Name of parameter.
+          type: string
+        type_text:
+          description: Full data type spec, SQL/catalogString text.
+          type: string
+        type_json:
+          description: Full data type spec, JSON-serialized.
+          type: string
+        type_name:
+          $ref: '#/components/schemas/ColumnTypeName'
+        type_precision:
+          description: Digits of precision; required on Create for DecimalTypes.
+          type: integer
+          format: int32
+        type_scale:
+          description: Digits to right of decimal; Required on Create for DecimalTypes.
+          type: integer
+          format: int32
+        type_interval_type:
+          description: Format of IntervalType.
+          type: string
+        position:
+          description: Ordinal position of column (starting at position 0).
+          type: integer
+          format: int32
+        parameter_mode:
+          $ref: '#/components/schemas/FunctionParameterMode'
+        parameter_type:
+          $ref: '#/components/schemas/FunctionParameterType'
+        parameter_default:
+          description: Default value of the parameter.
+          type: string
+        comment:
+          description: User-provided free-form text description.
+          type: string
+    FunctionDependency:
+      description: A function that is dependent on a SQL object.
+      type: object
+      required:
+      - function_full_name
+      properties:
+        function_full_name:
+          description: Full name of the dependent function, in the form of __catalog_name__.__schema_name__.__function_name__.
+          type: string
+    FunctionInfo:
+      type: object
+      properties:
+        name:
+          description: Name of function, relative to parent schema.
+          type: string
+        catalog_name:
+          description: Name of parent catalog.
+          type: string
+        schema_name:
+          description: Name of parent schema relative to its parent catalog.
+          type: string
+        input_params:
+          $ref: '#/components/schemas/FunctionParameterInfos'
+        data_type:
+          $ref: '#/components/schemas/ColumnTypeName'
+        full_data_type:
+          description: Pretty printed function data type.
+          type: string
+        return_params:
+          $ref: '#/components/schemas/FunctionParameterInfos'
+        routine_body:
+          description: "Function language. When **EXTERNAL** is used, the language of the routine function should be specified in the __external_language__ field, \nand the __return_params__ of the function cannot be used (as **TABLE** return type is not supported),\nand the __sql_data_access__ field must be **NO_SQL**.\n"
+          type: string
+          enum:
+          - SQL
+          - EXTERNAL
+        routine_definition:
+          description: Function body.
+          type: string
+        routine_dependencies:
+          $ref: '#/components/schemas/DependencyList'
+        parameter_style:
+          description: Function parameter style. **S** is the value for SQL.
+          type: string
+          enum:
+          - S
+        is_deterministic:
+          description: Whether the function is deterministic.
+          type: boolean
+        sql_data_access:
+          description: Function SQL data access.
+          type: string
+          enum:
+          - CONTAINS_SQL
+          - READS_SQL_DATA
+          - NO_SQL
+        is_null_call:
+          description: Function null call.
+          type: boolean
+        security_type:
+          description: Function security type.
+          type: string
+          enum:
+          - DEFINER
+        specific_name:
+          description: Specific name of the function; Reserved for future use.
+          type: string
+        comment:
+          description: User-provided free-form text description.
+          type: string
+        properties:
+          description: JSON-serialized key-value pair map, encoded (escaped) as a string.
+          type: string
+        full_name:
+          description: Full name of function, in form of __catalog_name__.__schema_name__.__function__name__
+          type: string
+        owner:
+          description: Username of current owner of function.
+          type: string
+        created_at:
+          description: Time at which this function was created, in epoch milliseconds.
+          type: integer
+          format: int64
+        created_by:
+          description: Username of function creator.
+          type: string
+        updated_at:
+          description: Time at which this function was last updated, in epoch milliseconds.
+          type: integer
+          format: int64
+        updated_by:
+          description: Username of user who last modified function.
+          type: string
+        function_id:
+          description: Id of Function, relative to parent schema.
+          type: string
+        external_language:
+          description: External language of the function.
+          type: string
+    Dependency:
+      description: A dependency of a SQL object. Either the __table__ field or the __function__ field must be defined.
+      type: object
+      properties:
+        table:
+          $ref: '#/components/schemas/TableDependency'
+        function:
+          $ref: '#/components/schemas/FunctionDependency'
+    ListFunctionsResponse:
+      type: object
+      properties:
+        functions:
+          description: An array of function information objects.
+          type: array
+          items:
+            $ref: '#/components/schemas/FunctionInfo'
+        next_page_token:
+          type: string
+          description: 'Opaque token to retrieve the next page of results. Absent if there are no more pages.
+
+            __page_token__ should be set to this value for the next request (for the next page of results).
+
+            '
+    CreateFunctionRequest:
+      type: object
+      properties:
+        function_info:
+          $ref: '#/components/schemas/CreateFunction'
+      required:
+      - function_info
+    FunctionParameterMode:
+      description: The mode of the function parameter.
+      type: string
+      enum:
+      - IN
+    FunctionParameterType:
+      description: The type of function parameter.
+      type: string
+      enum:
+      - PARAM
+      - COLUMN
+    CreateFunction:
+      type: object
+      required:
+      - name
+      - catalog_name
+      - schema_name
+      - input_params
+      - data_type
+      - full_data_type
+      - routine_body
+      - routine_definition
+      - parameter_style
+      - is_deterministic
+      - sql_data_access
+      - is_null_call
+      - security_type
+      - specific_name
+      properties:
+        name:
+          description: Name of function, relative to parent schema.
+          type: string
+        catalog_name:
+          description: Name of parent catalog.
+          type: string
+        schema_name:
+          description: Name of parent schema relative to its parent catalog.
+          type: string
+        input_params:
+          $ref: '#/components/schemas/FunctionParameterInfos'
+        data_type:
+          $ref: '#/components/schemas/ColumnTypeName'
+        full_data_type:
+          description: Pretty printed function data type.
+          type: string
+        return_params:
+          $ref: '#/components/schemas/FunctionParameterInfos'
+        routine_body:
+          description: "Function language. When **EXTERNAL** is used, the language of the routine function should be specified in the __external_language__ field, \nand the __return_params__ of the function cannot be used (as **TABLE** return type is not supported),\nand the __sql_data_access__ field must be **NO_SQL**.\n"
+          type: string
+          enum:
+          - SQL
+          - EXTERNAL
+        routine_definition:
+          description: Function body.
+          type: string
+        routine_dependencies:
+          $ref: '#/components/schemas/DependencyList'
+        parameter_style:
+          description: Function parameter style. **S** is the value for SQL.
+          type: string
+          enum:
+          - S
+        is_deterministic:
+          description: Whether the function is deterministic.
+          type: boolean
+        sql_data_access:
+          description: Function SQL data access.
+          type: string
+          enum:
+          - CONTAINS_SQL
+          - READS_SQL_DATA
+          - NO_SQL
+        is_null_call:
+          description: Function null call.
+          type: boolean
+        security_type:
+          description: Function security type.
+          type: string
+          enum:
+          - DEFINER
+        specific_name:
+          description: Specific name of the function; Reserved for future use.
+          type: string
+        comment:
+          description: User-provided free-form text description.
+          type: string
+        properties:
+          description: JSON-serialized key-value pair map, encoded (escaped) as a string.
+          type: string
+        external_language:
+          description: External language of the function.
+          type: string
+    FunctionParameterInfos:
+      type: object
+      properties:
+        parameters:
+          description: The array of __FunctionParameterInfo__ definitions of the function's parameters.
+          type: array
+          items:
+            $ref: '#/components/schemas/FunctionParameterInfo'
+    TableDependency:
+      description: A table that is dependent on a SQL object.
+      type: object
+      required:
+      - table_full_name
+      properties:
+        table_full_name:
+          description: Full name of the dependent table, in the form of __catalog_name__.__schema_name__.__table_name__.
+          type: string
+    ColumnTypeName:
+      description: Name of type (INT, STRUCT, MAP, etc.).
+      type: string
+      enum:
+      - BOOLEAN
+      - BYTE
+      - SHORT
+      - INT
+      - LONG
+      - FLOAT
+      - DOUBLE
+      - DATE
+      - TIMESTAMP
+      - TIMESTAMP_NTZ
+      - STRING
+      - BINARY
+      - DECIMAL
+      - INTERVAL
+      - ARRAY
+      - STRUCT
+      - MAP
+      - VARIANT
+      - CHAR
+      - 'NULL'
+      - USER_DEFINED_TYPE
+      - TABLE_TYPE

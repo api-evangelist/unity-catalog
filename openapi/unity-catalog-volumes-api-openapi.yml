@@ -1,0 +1,339 @@
+openapi: 3.2.0
+info:
+  title: Unity Catalog Volumes API
+  version: '0.1'
+  description: Volumes are a Unity Catalog capability for accessing, storing, governing, organizing and processing files.
+servers:
+- url: http://localhost:8080/api/2.1/unity-catalog
+  description: Localhost reference server
+tags:
+- name: Volumes
+  description: Volumes are a Unity Catalog capability for accessing, storing, governing, organizing and processing files.
+paths:
+  /volumes:
+    post:
+      tags:
+      - Volumes
+      operationId: createVolume
+      summary: Create a Volume
+      description: Creates a new volume.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateVolumeRequestContent'
+            examples:
+              CreateExternalVolumeExample:
+                summary: Create an External Volume
+                description: Create an External Volume and point the volume to a folder in the S3 bucket
+                value:
+                  catalog_name: main
+                  schema_name: default
+                  name: my_volume
+                  volume_type: EXTERNAL
+                  comment: This is my first volume
+      responses:
+        '200':
+          description: Successfully created the volume
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VolumeInfo'
+              examples:
+                CreateVolumeExample:
+                  summary: Response of successful creation
+                  description: The properties of the volume will be returned if the operation succeeds
+                  value:
+                    catalog_name: main
+                    schema_name: default
+                    name: my_volume
+                    volume_type: EXTERNAL
+                    created_at: 1666369196203
+                    updated_at: 1666369196203
+                    comment: This is my first volume
+    get:
+      tags:
+      - Volumes
+      operationId: listVolumes
+      summary: List Volumes
+      description: 'Gets an array of available volumes under the parent catalog and schema.
+
+        There is no guarantee of a specific ordering of the elements in the array.'
+      parameters:
+      - name: catalog_name
+        in: query
+        description: The identifier of the catalog
+        schema:
+          type: string
+        required: true
+        examples:
+          CatalogNameExample:
+            summary: Specify the target catalog to be `main`
+            description: Execute the operation against the `main` catalog
+            value: main
+      - name: schema_name
+        in: query
+        description: The identifier of the schema
+        schema:
+          type: string
+        required: true
+        examples:
+          SchemaNameExample:
+            summary: Specify the target schema to be `default`
+            description: Execute the operation against the `default` schema
+            value: default
+      - name: max_results
+        in: query
+        description: 'Maximum number of volumes to return (page length).
+
+
+          If not set, the page length is set to a server configured value.
+
+          - when set to a value greater than 0, the page length is the minimum of this value and a server configured value;
+
+          - when set to 0, the page length is set to a server configured value;
+
+          - when set to a value less than 0, an invalid parameter error is returned;
+
+
+          Note: this parameter controls only the maximum number of volumes to return. The actual number of volumes returned in a page may be smaller than this value, including 0, even if there are more pages.
+
+
+          '
+        required: false
+        schema:
+          type: integer
+          format: int32
+          maximum: 10000
+      - name: page_token
+        in: query
+        description: Opaque token returned by a previous request. It must be included in the request to retrieve the next page of results (pagination).
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: The volume list was successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListVolumesResponseContent'
+              examples:
+                ListVolumesExample:
+                  summary: Response of success retrieval of the volumes
+                  description: A list of volume properties will be returned if the operation succeeds
+                  value:
+                    volumes:
+                    - catalog_name: main
+                      schema_name: default
+                      name: my_volume
+                      volume_type: EXTERNAL
+                      created_at: 1666369196203
+                      updated_at: 1666369196203
+                      comment: This is my first volume
+                    - catalog_name: main
+                      schema_name: default
+                      name: my_another_volume
+                      volume_type: EXTERNAL
+                      created_at: 1666369196203
+                      updated_at: 1666369196203
+                      comment: This is my other volume
+  /volumes/{name}:
+    parameters:
+    - name: name
+      in: path
+      description: The three-level (fully qualified) name of the volume
+      schema:
+        type: string
+      required: true
+      examples:
+        FullNameArgExample:
+          summary: Execute the operation against the volume named `my_volume` under `main` catalog and `default` schema
+          value: main.default.my_volume
+    get:
+      tags:
+      - Volumes
+      operationId: getVolume
+      summary: Get a Volume
+      description: Gets a volume for a specific catalog and schema.
+      responses:
+        '200':
+          description: Successfully retrieved the properties of the volume
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VolumeInfo'
+              examples:
+                GetVolumeExample:
+                  summary: Response of successful retrieval of an existing volume
+                  description: The properties of the volume will be returned if the operation succeeds
+                  value:
+                    catalog_name: main
+                    schema_name: default
+                    name: my_volume
+                    volume_type: EXTERNAL
+                    created_at: 1666369196203
+                    updated_at: 1666369196203
+                    comment: This is my first volume
+    patch:
+      tags:
+      - Volumes
+      operationId: updateVolume
+      summary: Update a Volume
+      description: 'Updates the specified volume under the specified parent catalog and schema.
+
+
+        Currently only the name or the comment of the volume could be updated.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateVolumeRequestContent'
+            examples:
+              UpdateVolumeName:
+                summary: Update the name of the volume
+                description: Update the name of the volume
+                value:
+                  new_name: my_new_volume
+              UpdateVolumeComment:
+                summary: Update the comment of the volume
+                description: Update the comment of the volume
+                value:
+                  comment: This is my new volume
+      responses:
+        '200':
+          description: Successfully updated the properties of the volume
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VolumeInfo'
+              examples:
+                UpdateVolumeName:
+                  summary: Update the name of the volume
+                  description: The new properties of the volume will be returned if the operation succeeds
+                  value:
+                    catalog_name: main
+                    schema_name: default
+                    name: my_new_volume
+                    volume_type: EXTERNAL
+                    created_at: 1666369196203
+                    updated_at: 1666369207415
+                    comment: This is my new volume
+    delete:
+      tags:
+      - Volumes
+      operationId: deleteVolume
+      summary: Delete a Volume
+      description: Deletes a volume from the specified parent catalog and schema.
+      responses:
+        '200':
+          description: Successfully deleted the volume
+          content:
+            application/json:
+              schema: {}
+components:
+  schemas:
+    UpdateVolumeRequestContent:
+      type: object
+      properties:
+        comment:
+          type: string
+          maxLength: 65536
+          minLength: 1
+          description: The comment attached to the volume
+        new_name:
+          description: New name for the volume.
+          type: string
+    ListVolumesResponseContent:
+      type: object
+      properties:
+        volumes:
+          type: array
+          items:
+            $ref: '#/components/schemas/VolumeInfo'
+        next_page_token:
+          description: 'Opaque token to retrieve the next page of results. Absent if there are no more pages.
+
+            __page_token__ should be set to this value for the next request to retrieve the next page of results.
+
+            '
+          type: string
+    VolumeType:
+      type: string
+      enum:
+      - MANAGED
+      - EXTERNAL
+      description: The type of the volume
+    VolumeInfo:
+      type: object
+      properties:
+        catalog_name:
+          type: string
+          description: The name of the catalog where the schema and the volume are
+        schema_name:
+          type: string
+          description: The name of the schema where the volume is
+        name:
+          type: string
+          description: The name of the volume
+        comment:
+          type: string
+          maxLength: 65536
+          minLength: 1
+          description: The comment attached to the volume
+        owner:
+          description: The identifier of the user who owns the volume
+          type: string
+        created_at:
+          type: integer
+          format: int64
+          description: Time at which this volume was created, in epoch milliseconds.
+        created_by:
+          description: TThe identifier of the user who created the volume
+          type: string
+        updated_at:
+          type: integer
+          format: int64
+          description: Time at which this volume was last modified, in epoch milliseconds.
+        updated_by:
+          description: The identifier of the user who updated the volume last time
+          type: string
+        volume_id:
+          type: string
+          description: Unique identifier of the volume
+        volume_type:
+          $ref: '#/components/schemas/VolumeType'
+        storage_location:
+          type: string
+          description: The storage location of the volume
+        full_name:
+          type: string
+          description: Full name of volume, in form of __catalog_name__.__schema_name__.__volume_name__.
+    CreateVolumeRequestContent:
+      type: object
+      properties:
+        catalog_name:
+          type: string
+          description: The name of the catalog where the schema and the volume are
+        schema_name:
+          type: string
+          description: The name of the schema where the volume is
+        name:
+          type: string
+          description: The name of the volume
+        volume_type:
+          $ref: '#/components/schemas/VolumeType'
+        comment:
+          type: string
+          maxLength: 65536
+          minLength: 1
+          description: The comment attached to the volume
+        storage_location:
+          type: string
+          description: The storage location of the volume
+      required:
+      - catalog_name
+      - schema_name
+      - name
+      - volume_type

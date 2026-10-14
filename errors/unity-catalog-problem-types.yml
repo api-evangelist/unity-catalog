@@ -1,0 +1,63 @@
+generated: '2026-10-13'
+method: derived
+generator: derive-problem-types.py
+source:
+- openapi/unitycatalog-all.yaml
+format: custom
+envelope:
+  media_type: null
+  schema: null
+coverage:
+  operations: 54
+  statuses_declared: 8
+problems:
+- status: 400
+  title: Bad Request
+  description: 'Bad request or Invalid Argument. Example: table_uri in the request doesn''t match the existing table_uri
+    for the table.'
+  operations: 2
+  media_types: []
+  schema: null
+- status: 401
+  title: Unauthorized
+  description: Unauthorized. Authentication credentials are missing or incorrect.
+  operations: 2
+  media_types: []
+  schema: null
+- status: 403
+  title: Forbidden
+  description: Forbidden. The user does not have the necessary permissions to perform this action.
+  operations: 2
+  media_types: []
+  schema: null
+- status: 404
+  title: Not Found
+  description: Not Found. The specified table does not exist.
+  operations: 2
+  media_types: []
+  schema: null
+- status: 409
+  title: Conflict
+  description: Conflict. Indicates that a different commit with the same version already exists.
+  operations: 1
+  media_types: []
+  schema: null
+- status: 429
+  title: Too Many Requests
+  description: The maximum number of unbackfilled commits per table has been reached. Please backfill some commits
+    before retrying.
+  operations: 1
+  media_types: []
+  schema: null
+- status: 500
+  title: Internal Server Error
+  description: Internal Server Error. An unexpected error occurred on the server.
+  operations: 2
+  media_types: []
+  schema: null
+- status: 501
+  title: Not Implemented
+  description: Not Implemented. The requested functionality is not supported.
+  operations: 1
+  media_types: []
+  schema: null

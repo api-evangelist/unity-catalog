@@ -1,0 +1,434 @@
+generated: '2026-10-13'
+method: derived
+generator: derive-vocabulary.py
+source: openapi/unitycatalog-all.yaml
+vocabulary:
+  name: Unity Catalog Domain Vocabulary
+  description: 'Terms declared by Unity Catalog''s own API contract: its resource groups, objects and enumerations, with the contract''s definitions.
+    Derived, not authored.'
+  version: '2026-10-13'
+  terms:
+  - term: Catalogs
+    definition: A catalog is the first layer of Unity Catalog’s three-level namespace. It’s used to organize your data assets.
+    tags:
+    - Resource Group
+    source: openapi/unitycatalog-all.yaml
+  - term: Schemas
+    definition: A schema (also called a database) is the second layer of Unity Catalog’s three-level namespace. A schema organizes tables, volumes
+      and functions.
+    tags:
+    - Resource Group
+    source: openapi/unitycatalog-all.yaml
+  - term: Tables
+    definition: A table resides in the third layer of Unity Catalog’s three-level namespace. It contains rows of data. A table can be managed
+      or external.
+    tags:
+    - Resource Group
+    source: openapi/unitycatalog-all.yaml
+  - term: Volumes
+    definition: Volumes are a Unity Catalog capability for accessing, storing, governing, organizing and processing files. Use cases include running
+      machine learning on unstructured data such as image, audio, video, or PDF files, organizing data sets during the data exploration stages
+      in data science, working with libraries that require access to the local file system on cluster machines, storing library and conf
+    tags:
+    - Resource Group
+    source: openapi/unitycatalog-all.yaml
+  - term: Functions
+    definition: Functions implement User-Defined Functions (UDFs) in Unity Catalog. The function implementation can be a SQL expression/query
+      or a python function, and it can be invoked wherever a table reference is allowed in a query. In Unity Catalog, a function resides at the
+      same level as a table, so it can be referenced with the form __catalog_name__.__schema_name__.__function_name__.
+    tags:
+    - Resource Group
+    source: openapi/unitycatalog-all.yaml
+  - term: RegisteredModels
+    definition: Registered models are machine learning models that are stored within the Unity Catalog model registry. They are comprised of all
+      versions of a single model that a user wishes to keep. A registered model resides in the third layer of Unity Catalog’s three-level namespace,
+      and can be referenced with the form __catalog_name__.__schema_name__.__model_name__.
+    tags:
+    - Resource Group
+    source: openapi/unitycatalog-all.yaml
+  - term: ModelVersions
+    definition: Model versions contain all artifact files associated with an individual machine learning model. They are associated with a single
+      parent model and have an integer identifier, indicating the version number of the model. Model versions are referenced via model URI's using
+      the Unity Catalog three-level namespace of the registered model and the version identifier.
+    tags:
+    - Resource Group
+    source: openapi/unitycatalog-all.yaml
+  - term: TemporaryCredentials
+    definition: Temporary credentials are used to access storage locations or assets for a limited lifetime.
+    tags:
+    - Resource Group
+    source: openapi/unitycatalog-all.yaml
+  - term: Permissions
+    definition: In Unity Catalog, data is secure by default. Access can be granted.
+    tags:
+    - Resource Group
+    source: openapi/unitycatalog-all.yaml
+  - term: Metastores
+    definition: A metastore is the top-level container of objects in Unity Catalog that stores all UC assets.
+    tags:
+    - Resource Group
+    source: openapi/unitycatalog-all.yaml
+  - term: DeltaCommits
+    definition: '"Delta commits" is a Delta tables feature that allows Delta tables to designate a coordinator to coordinate commits. This is
+      Unity Catalog''s API to allow Unity Catalog be the commit coordinator for managed tables. (See https://github.com/delta-io/delta/blob/master/protocol_rfcs/catalog-managed.md
+      for more details)'
+    tags:
+    - Resource Group
+    source: openapi/unitycatalog-all.yaml
+  - term: SecurablePropertiesMap
+    definition: A map of key-value properties attached to the securable.
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/SecurablePropertiesMap
+  - term: VolumeType
+    definition: The type of the volume
+    tags:
+    - Enumeration
+    source: openapi/unitycatalog-all.yaml#/components/schemas/VolumeType
+  - term: CreateVolumeRequestContent
+    definition: 'Object declared by the contract with fields: catalog_name, schema_name, name, volume_type, comment, storage_location.'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/CreateVolumeRequestContent
+  - term: ListVolumesResponseContent
+    definition: 'Object declared by the contract with fields: volumes, next_page_token.'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/ListVolumesResponseContent
+  - term: UpdateVolumeRequestContent
+    definition: 'Object declared by the contract with fields: comment, new_name.'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/UpdateVolumeRequestContent
+  - term: VolumeInfo
+    definition: 'Object declared by the contract with fields: catalog_name, schema_name, name, comment, owner, created_at, created_by, updated_at,
+      updated_by, volume_id, volume_type, storage_location. (1 more)'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/VolumeInfo
+  - term: ColumnTypeName
+    definition: Name of type (INT, STRUCT, MAP, etc.).
+    tags:
+    - Enumeration
+    source: openapi/unitycatalog-all.yaml#/components/schemas/ColumnTypeName
+  - term: ColumnInfo
+    definition: 'Object declared by the contract with fields: name, type_text, type_json, type_name, type_precision, type_scale, type_interval_type,
+      position, comment, nullable, partition_index.'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/ColumnInfo
+  - term: TableType
+    definition: 'Enumeration declared by the contract with values: MANAGED, EXTERNAL, STREAMING_TABLE, MATERIALIZED_VIEW, METRIC_VIEW, VIEW.'
+    tags:
+    - Enumeration
+    source: openapi/unitycatalog-all.yaml#/components/schemas/TableType
+  - term: DataSourceFormat
+    definition: Data source format
+    tags:
+    - Enumeration
+    source: openapi/unitycatalog-all.yaml#/components/schemas/DataSourceFormat
+  - term: TableInfo
+    definition: 'Object declared by the contract with fields: name, catalog_name, schema_name, table_type, data_source_format, columns, storage_location,
+      comment, properties, owner, created_at, created_by. (5 more)'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/TableInfo
+  - term: CreateTable
+    definition: 'Object declared by the contract with fields: name, catalog_name, schema_name, table_type, data_source_format, columns, storage_location,
+      comment, properties, view_definition, view_dependencies.'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/CreateTable
+  - term: StagingTableInfo
+    definition: 'Object declared by the contract with fields: name, catalog_name, schema_name, id, staging_location.'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/StagingTableInfo
+  - term: CreateStagingTable
+    definition: 'Object declared by the contract with fields: name, catalog_name, schema_name.'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/CreateStagingTable
+  - term: ListTablesResponse
+    definition: 'Object declared by the contract with fields: tables, next_page_token.'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/ListTablesResponse
+  - term: SchemaInfo
+    definition: 'Object declared by the contract with fields: name, catalog_name, comment, properties, full_name, owner, created_at, created_by,
+      updated_at, updated_by, schema_id, storage_root. (1 more)'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/SchemaInfo
+  - term: CreateSchema
+    definition: 'Object declared by the contract with fields: name, catalog_name, comment, properties, storage_root.'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/CreateSchema
+  - term: UpdateSchema
+    definition: 'Object declared by the contract with fields: comment, properties, new_name.'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/UpdateSchema
+  - term: ListSchemasResponse
+    definition: 'Object declared by the contract with fields: schemas, next_page_token.'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/ListSchemasResponse
+  - term: CatalogInfo
+    definition: 'Object declared by the contract with fields: name, comment, properties, owner, created_at, created_by, updated_at, updated_by,
+      id, storage_root, storage_location.'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/CatalogInfo
+  - term: CreateCatalog
+    definition: 'Object declared by the contract with fields: name, comment, properties, storage_root.'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/CreateCatalog
+  - term: UpdateCatalog
+    definition: 'Object declared by the contract with fields: comment, properties, new_name.'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/UpdateCatalog
+  - term: ListCatalogsResponse
+    definition: 'Object declared by the contract with fields: catalogs, next_page_token.'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/ListCatalogsResponse
+  - term: FunctionParameterType
+    definition: The type of function parameter.
+    tags:
+    - Enumeration
+    source: openapi/unitycatalog-all.yaml#/components/schemas/FunctionParameterType
+  - term: FunctionParameterMode
+    definition: The mode of the function parameter.
+    tags:
+    - Enumeration
+    source: openapi/unitycatalog-all.yaml#/components/schemas/FunctionParameterMode
+  - term: FunctionParameterInfo
+    definition: 'Object declared by the contract with fields: name, type_text, type_json, type_name, type_precision, type_scale, type_interval_type,
+      position, parameter_mode, parameter_type, parameter_default, comment.'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/FunctionParameterInfo
+  - term: FunctionParameterInfos
+    definition: 'Object declared by the contract with fields: parameters.'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/FunctionParameterInfos
+  - term: CreateFunctionRequest
+    definition: 'Object declared by the contract with fields: function_info.'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/CreateFunctionRequest
+  - term: FunctionDependency
+    definition: A function that is dependent on a SQL object.
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/FunctionDependency
+  - term: TableDependency
+    definition: A table that is dependent on a SQL object.
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/TableDependency
+  - term: Dependency
+    definition: A dependency of a SQL object. Either the __table__ field or the __function__ field must be defined.
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/Dependency
+  - term: DependencyList
+    definition: A list of dependencies.
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/DependencyList
+  - term: CreateFunction
+    definition: 'Object declared by the contract with fields: name, catalog_name, schema_name, input_params, data_type, full_data_type, return_params,
+      routine_body, routine_definition, routine_dependencies, parameter_style, is_deterministic. (7 more)'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/CreateFunction
+  - term: FunctionInfo
+    definition: 'Object declared by the contract with fields: name, catalog_name, schema_name, input_params, data_type, full_data_type, return_params,
+      routine_body, routine_definition, routine_dependencies, parameter_style, is_deterministic. (14 more)'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/FunctionInfo
+  - term: ListFunctionsResponse
+    definition: 'Object declared by the contract with fields: functions, next_page_token.'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/ListFunctionsResponse
+  - term: GenerateTemporaryModelVersionCredential
+    definition: 'Object declared by the contract with fields: catalog_name, schema_name, model_name, version, operation.'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/GenerateTemporaryModelVersionCredential
+  - term: ModelVersionOperation
+    definition: 'Enumeration declared by the contract with values: UNKNOWN_MODEL_VERSION_OPERATION, READ_MODEL_VERSION, READ_WRITE_MODEL_VERSION.'
+    tags:
+    - Enumeration
+    source: openapi/unitycatalog-all.yaml#/components/schemas/ModelVersionOperation
+  - term: GenerateTemporaryTableCredential
+    definition: 'Object declared by the contract with fields: table_id, operation.'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/GenerateTemporaryTableCredential
+  - term: TableOperation
+    definition: 'Enumeration declared by the contract with values: UNKNOWN_TABLE_OPERATION, READ, READ_WRITE.'
+    tags:
+    - Enumeration
+    source: openapi/unitycatalog-all.yaml#/components/schemas/TableOperation
+  - term: AwsCredentials
+    definition: 'Object declared by the contract with fields: access_key_id, secret_access_key, session_token.'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/AwsCredentials
+  - term: AzureUserDelegationSAS
+    definition: 'Object declared by the contract with fields: sas_token.'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/AzureUserDelegationSAS
+  - term: GcpOauthToken
+    definition: 'Object declared by the contract with fields: oauth_token.'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/GcpOauthToken
+  - term: GenerateTemporaryVolumeCredential
+    definition: 'Object declared by the contract with fields: volume_id, operation.'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/GenerateTemporaryVolumeCredential
+  - term: VolumeOperation
+    definition: 'Enumeration declared by the contract with values: UNKNOWN_VOLUME_OPERATION, READ_VOLUME, WRITE_VOLUME.'
+    tags:
+    - Enumeration
+    source: openapi/unitycatalog-all.yaml#/components/schemas/VolumeOperation
+  - term: RegisteredModelInfo
+    definition: 'Object declared by the contract with fields: name, catalog_name, schema_name, storage_location, full_name, comment, owner, created_at,
+      created_by, updated_at, updated_by, id.'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/RegisteredModelInfo
+  - term: ModelVersionInfo
+    definition: 'Object declared by the contract with fields: model_name, catalog_name, schema_name, version, source, run_id, status, storage_location,
+      comment, created_at, created_by, updated_at. (2 more)'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/ModelVersionInfo
+  - term: ModelVersionStatus
+    definition: All possible model version statuses.
+    tags:
+    - Enumeration
+    source: openapi/unitycatalog-all.yaml#/components/schemas/ModelVersionStatus
+  - term: CreateRegisteredModel
+    definition: 'Object declared by the contract with fields: name, catalog_name, schema_name, comment.'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/CreateRegisteredModel
+  - term: UpdateRegisteredModel
+    definition: 'Object declared by the contract with fields: comment, new_name.'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/UpdateRegisteredModel
+  - term: ListRegisteredModelsResponse
+    definition: 'Object declared by the contract with fields: registered_models, next_page_token.'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/ListRegisteredModelsResponse
+  - term: CreateModelVersion
+    definition: 'Object declared by the contract with fields: model_name, catalog_name, schema_name, source, run_id, comment.'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/CreateModelVersion
+  - term: UpdateModelVersion
+    definition: 'Object declared by the contract with fields: comment.'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/UpdateModelVersion
+  - term: ListModelVersionsResponse
+    definition: 'Object declared by the contract with fields: model_versions, next_page_token.'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/ListModelVersionsResponse
+  - term: FinalizeModelVersion
+    definition: 'Object declared by the contract with fields: full_name, version.'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/FinalizeModelVersion
+  - term: GenerateTemporaryPathCredential
+    definition: 'Object declared by the contract with fields: url, operation.'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/GenerateTemporaryPathCredential
+  - term: PathOperation
+    definition: 'Enumeration declared by the contract with values: UNKNOWN_PATH_OPERATION, PATH_READ, PATH_READ_WRITE, PATH_CREATE_TABLE.'
+    tags:
+    - Enumeration
+    source: openapi/unitycatalog-all.yaml#/components/schemas/PathOperation
+  - term: PrincipalType
+    definition: The type of the principal.
+    tags:
+    - Enumeration
+    source: openapi/unitycatalog-all.yaml#/components/schemas/PrincipalType
+  - term: SecurableType
+    definition: The type of the resource.
+    tags:
+    - Enumeration
+    source: openapi/unitycatalog-all.yaml#/components/schemas/SecurableType
+  - term: Privilege
+    definition: The privilege to grant.
+    tags:
+    - Enumeration
+    source: openapi/unitycatalog-all.yaml#/components/schemas/Privilege
+  - term: UpdatePermissions
+    definition: 'Object declared by the contract with fields: changes.'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/UpdatePermissions
+  - term: PermissionsChange
+    definition: 'Object declared by the contract with fields: principal, add, remove.'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/PermissionsChange
+  - term: PermissionsList
+    definition: 'Object declared by the contract with fields: privilege_assignments.'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/PermissionsList
+  - term: PrivilegeAssignment
+    definition: 'Object declared by the contract with fields: principal, privileges.'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/PrivilegeAssignment
+  - term: GetMetastoreSummaryResponse
+    definition: 'Object declared by the contract with fields: metastore_id.'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/GetMetastoreSummaryResponse
+  - term: CredentialInfo
+    definition: 'Object declared by the contract with fields: name, aws_iam_role, comment, owner, full_name, id, created_at, created_by, updated_at,
+      updated_by, purpose.'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/CredentialInfo
+  - term: CreateCredentialRequest
+    definition: 'Object declared by the contract with fields: name, comment, aws_iam_role, purpose.'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/CreateCredentialRequest
+  - term: UpdateCredentialRequest
+    definition: 'Object declared by the contract with fields: comment, owner, aws_iam_role, new_name.'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/UpdateCredentialRequest
+  - term: AwsIamRoleArn
+    definition: The Amazon Resource Name (ARN) of the AWS IAM role used to vend temporary credentials.
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/AwsIamRoleArn
+  - term: AwsIamRoleRequest
+    definition: 'Object declared by the contract with fields: role_arn.'
+    tags:
+    - Object
+    source: openapi/unitycatalog-all.yaml#/components/schemas/AwsIamRoleRequest

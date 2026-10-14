@@ -1,0 +1,572 @@
+{
+  "@context": {
+    "@vocab": "https://unitycatalog.io/schema#",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "unity": "https://unitycatalog.io/schema#",
+    "VolumeType": "unity:VolumeType",
+    "CreateVolumeRequestContent": "unity:CreateVolumeRequestContent",
+    "catalog_name": {
+      "@id": "unity:catalog_name",
+      "@type": "xsd:string"
+    },
+    "schema_name": {
+      "@id": "unity:schema_name",
+      "@type": "xsd:string"
+    },
+    "name": {
+      "@id": "unity:name",
+      "@type": "xsd:string"
+    },
+    "volume_type": {
+      "@id": "unity:volume_type",
+      "@type": "@id"
+    },
+    "comment": {
+      "@id": "unity:comment",
+      "@type": "xsd:string"
+    },
+    "storage_location": {
+      "@id": "unity:storage_location",
+      "@type": "xsd:string"
+    },
+    "ListVolumesResponseContent": "unity:ListVolumesResponseContent",
+    "volumes": {
+      "@id": "unity:volumes",
+      "@container": "@list"
+    },
+    "next_page_token": {
+      "@id": "unity:next_page_token",
+      "@type": "xsd:string"
+    },
+    "UpdateVolumeRequestContent": "unity:UpdateVolumeRequestContent",
+    "new_name": {
+      "@id": "unity:new_name",
+      "@type": "xsd:string"
+    },
+    "VolumeInfo": "unity:VolumeInfo",
+    "owner": {
+      "@id": "unity:owner",
+      "@type": "xsd:string"
+    },
+    "created_at": {
+      "@id": "unity:created_at",
+      "@type": "xsd:integer"
+    },
+    "created_by": {
+      "@id": "unity:created_by",
+      "@type": "xsd:string"
+    },
+    "updated_at": {
+      "@id": "unity:updated_at",
+      "@type": "xsd:integer"
+    },
+    "updated_by": {
+      "@id": "unity:updated_by",
+      "@type": "xsd:string"
+    },
+    "volume_id": {
+      "@id": "unity:volume_id",
+      "@type": "xsd:string"
+    },
+    "full_name": {
+      "@id": "unity:full_name",
+      "@type": "xsd:string"
+    },
+    "ColumnTypeName": "unity:ColumnTypeName",
+    "ColumnInfo": "unity:ColumnInfo",
+    "type_text": {
+      "@id": "unity:type_text",
+      "@type": "xsd:string"
+    },
+    "type_json": {
+      "@id": "unity:type_json",
+      "@type": "xsd:string"
+    },
+    "type_name": {
+      "@id": "unity:type_name",
+      "@type": "@id"
+    },
+    "type_precision": {
+      "@id": "unity:type_precision",
+      "@type": "xsd:integer"
+    },
+    "type_scale": {
+      "@id": "unity:type_scale",
+      "@type": "xsd:integer"
+    },
+    "type_interval_type": {
+      "@id": "unity:type_interval_type",
+      "@type": "xsd:string"
+    },
+    "position": {
+      "@id": "unity:position",
+      "@type": "xsd:integer"
+    },
+    "nullable": {
+      "@id": "unity:nullable",
+      "@type": "xsd:boolean"
+    },
+    "partition_index": {
+      "@id": "unity:partition_index",
+      "@type": "xsd:integer"
+    },
+    "TableType": "unity:TableType",
+    "DataSourceFormat": "unity:DataSourceFormat",
+    "TableInfo": "unity:TableInfo",
+    "table_type": {
+      "@id": "unity:table_type",
+      "@type": "@id"
+    },
+    "data_source_format": {
+      "@id": "unity:data_source_format",
+      "@type": "@id"
+    },
+    "columns": {
+      "@id": "unity:columns",
+      "@container": "@list"
+    },
+    "properties": {
+      "@id": "unity:properties",
+      "@type": "@id"
+    },
+    "table_id": {
+      "@id": "unity:table_id",
+      "@type": "xsd:string"
+    },
+    "view_definition": {
+      "@id": "unity:view_definition",
+      "@type": "xsd:string"
+    },
+    "view_dependencies": {
+      "@id": "unity:view_dependencies",
+      "@type": "@id"
+    },
+    "CreateTable": "unity:CreateTable",
+    "StagingTableInfo": "unity:StagingTableInfo",
+    "id": {
+      "@id": "unity:id",
+      "@type": "xsd:string"
+    },
+    "staging_location": {
+      "@id": "unity:staging_location",
+      "@type": "xsd:string"
+    },
+    "CreateStagingTable": "unity:CreateStagingTable",
+    "ListTablesResponse": "unity:ListTablesResponse",
+    "tables": {
+      "@id": "unity:tables",
+      "@container": "@list"
+    },
+    "SchemaInfo": "unity:SchemaInfo",
+    "schema_id": {
+      "@id": "unity:schema_id",
+      "@type": "xsd:string"
+    },
+    "storage_root": {
+      "@id": "unity:storage_root",
+      "@type": "xsd:string"
+    },
+    "CreateSchema": "unity:CreateSchema",
+    "UpdateSchema": "unity:UpdateSchema",
+    "ListSchemasResponse": "unity:ListSchemasResponse",
+    "schemas": {
+      "@id": "unity:schemas",
+      "@container": "@list"
+    },
+    "CatalogInfo": "unity:CatalogInfo",
+    "CreateCatalog": "unity:CreateCatalog",
+    "UpdateCatalog": "unity:UpdateCatalog",
+    "ListCatalogsResponse": "unity:ListCatalogsResponse",
+    "catalogs": {
+      "@id": "unity:catalogs",
+      "@container": "@list"
+    },
+    "FunctionParameterType": "unity:FunctionParameterType",
+    "FunctionParameterMode": "unity:FunctionParameterMode",
+    "FunctionParameterInfo": "unity:FunctionParameterInfo",
+    "parameter_mode": {
+      "@id": "unity:parameter_mode",
+      "@type": "@id"
+    },
+    "parameter_type": {
+      "@id": "unity:parameter_type",
+      "@type": "@id"
+    },
+    "parameter_default": {
+      "@id": "unity:parameter_default",
+      "@type": "xsd:string"
+    },
+    "FunctionParameterInfos": "unity:FunctionParameterInfos",
+    "parameters": {
+      "@id": "unity:parameters",
+      "@container": "@list"
+    },
+    "CreateFunctionRequest": "unity:CreateFunctionRequest",
+    "function_info": {
+      "@id": "unity:function_info",
+      "@type": "@id"
+    },
+    "FunctionDependency": "unity:FunctionDependency",
+    "function_full_name": {
+      "@id": "unity:function_full_name",
+      "@type": "xsd:string"
+    },
+    "TableDependency": "unity:TableDependency",
+    "table_full_name": {
+      "@id": "unity:table_full_name",
+      "@type": "xsd:string"
+    },
+    "Dependency": "unity:Dependency",
+    "table": {
+      "@id": "unity:table",
+      "@type": "@id"
+    },
+    "function": {
+      "@id": "unity:function",
+      "@type": "@id"
+    },
+    "DependencyList": "unity:DependencyList",
+    "dependencies": {
+      "@id": "unity:dependencies",
+      "@container": "@list"
+    },
+    "CreateFunction": "unity:CreateFunction",
+    "input_params": {
+      "@id": "unity:input_params",
+      "@type": "@id"
+    },
+    "data_type": {
+      "@id": "unity:data_type",
+      "@type": "@id"
+    },
+    "full_data_type": {
+      "@id": "unity:full_data_type",
+      "@type": "xsd:string"
+    },
+    "return_params": {
+      "@id": "unity:return_params",
+      "@type": "@id"
+    },
+    "routine_body": {
+      "@id": "unity:routine_body",
+      "@type": "xsd:string"
+    },
+    "routine_definition": {
+      "@id": "unity:routine_definition",
+      "@type": "xsd:string"
+    },
+    "routine_dependencies": {
+      "@id": "unity:routine_dependencies",
+      "@type": "@id"
+    },
+    "parameter_style": {
+      "@id": "unity:parameter_style",
+      "@type": "xsd:string"
+    },
+    "is_deterministic": {
+      "@id": "unity:is_deterministic",
+      "@type": "xsd:boolean"
+    },
+    "sql_data_access": {
+      "@id": "unity:sql_data_access",
+      "@type": "xsd:string"
+    },
+    "is_null_call": {
+      "@id": "unity:is_null_call",
+      "@type": "xsd:boolean"
+    },
+    "security_type": {
+      "@id": "unity:security_type",
+      "@type": "xsd:string"
+    },
+    "specific_name": {
+      "@id": "unity:specific_name",
+      "@type": "xsd:string"
+    },
+    "external_language": {
+      "@id": "unity:external_language",
+      "@type": "xsd:string"
+    },
+    "FunctionInfo": "unity:FunctionInfo",
+    "function_id": {
+      "@id": "unity:function_id",
+      "@type": "xsd:string"
+    },
+    "ListFunctionsResponse": "unity:ListFunctionsResponse",
+    "functions": {
+      "@id": "unity:functions",
+      "@container": "@list"
+    },
+    "GenerateTemporaryModelVersionCredential": "unity:GenerateTemporaryModelVersionCredential",
+    "model_name": {
+      "@id": "unity:model_name",
+      "@type": "xsd:string"
+    },
+    "version": {
+      "@id": "unity:version",
+      "@type": "xsd:integer"
+    },
+    "operation": {
+      "@id": "unity:operation",
+      "@type": "@id"
+    },
+    "ModelVersionOperation": "unity:ModelVersionOperation",
+    "GenerateTemporaryTableCredential": "unity:GenerateTemporaryTableCredential",
+    "TableOperation": "unity:TableOperation",
+    "AwsCredentials": "unity:AwsCredentials",
+    "access_key_id": {
+      "@id": "unity:access_key_id",
+      "@type": "xsd:string"
+    },
+    "secret_access_key": {
+      "@id": "unity:secret_access_key",
+      "@type": "xsd:string"
+    },
+    "session_token": {
+      "@id": "unity:session_token",
+      "@type": "xsd:string"
+    },
+    "AzureUserDelegationSAS": "unity:AzureUserDelegationSAS",
+    "sas_token": {
+      "@id": "unity:sas_token",
+      "@type": "xsd:string"
+    },
+    "GcpOauthToken": "unity:GcpOauthToken",
+    "oauth_token": {
+      "@id": "unity:oauth_token",
+      "@type": "xsd:string"
+    },
+    "GenerateTemporaryVolumeCredential": "unity:GenerateTemporaryVolumeCredential",
+    "VolumeOperation": "unity:VolumeOperation",
+    "RegisteredModelInfo": "unity:RegisteredModelInfo",
+    "ModelVersionInfo": "unity:ModelVersionInfo",
+    "source": {
+      "@id": "unity:source",
+      "@type": "xsd:string"
+    },
+    "run_id": {
+      "@id": "unity:run_id",
+      "@type": "xsd:string"
+    },
+    "status": {
+      "@id": "unity:status",
+      "@type": "@id"
+    },
+    "ModelVersionStatus": "unity:ModelVersionStatus",
+    "CreateRegisteredModel": "unity:CreateRegisteredModel",
+    "UpdateRegisteredModel": "unity:UpdateRegisteredModel",
+    "ListRegisteredModelsResponse": "unity:ListRegisteredModelsResponse",
+    "registered_models": {
+      "@id": "unity:registered_models",
+      "@container": "@list"
+    },
+    "CreateModelVersion": "unity:CreateModelVersion",
+    "UpdateModelVersion": "unity:UpdateModelVersion",
+    "ListModelVersionsResponse": "unity:ListModelVersionsResponse",
+    "model_versions": {
+      "@id": "unity:model_versions",
+      "@container": "@list"
+    },
+    "FinalizeModelVersion": "unity:FinalizeModelVersion",
+    "GenerateTemporaryPathCredential": "unity:GenerateTemporaryPathCredential",
+    "url": {
+      "@id": "unity:url",
+      "@type": "xsd:string"
+    },
+    "TemporaryCredentials": "unity:TemporaryCredentials",
+    "aws_temp_credentials": {
+      "@id": "unity:aws_temp_credentials",
+      "@type": "@id"
+    },
+    "azure_user_delegation_sas": {
+      "@id": "unity:azure_user_delegation_sas",
+      "@type": "@id"
+    },
+    "gcp_oauth_token": {
+      "@id": "unity:gcp_oauth_token",
+      "@type": "@id"
+    },
+    "expiration_time": {
+      "@id": "unity:expiration_time",
+      "@type": "xsd:integer"
+    },
+    "PathOperation": "unity:PathOperation",
+    "PrincipalType": "unity:PrincipalType",
+    "SecurableType": "unity:SecurableType",
+    "Privilege": "unity:Privilege",
+    "UpdatePermissions": "unity:UpdatePermissions",
+    "changes": {
+      "@id": "unity:changes",
+      "@container": "@list"
+    },
+    "PermissionsChange": "unity:PermissionsChange",
+    "principal": {
+      "@id": "unity:principal",
+      "@type": "xsd:string"
+    },
+    "add": {
+      "@id": "unity:add",
+      "@container": "@list"
+    },
+    "remove": {
+      "@id": "unity:remove",
+      "@container": "@list"
+    },
+    "PermissionsList": "unity:PermissionsList",
+    "privilege_assignments": {
+      "@id": "unity:privilege_assignments",
+      "@container": "@list"
+    },
+    "PrivilegeAssignment": "unity:PrivilegeAssignment",
+    "privileges": {
+      "@id": "unity:privileges",
+      "@container": "@list"
+    },
+    "GetMetastoreSummaryResponse": "unity:GetMetastoreSummaryResponse",
+    "metastore_id": {
+      "@id": "unity:metastore_id",
+      "@type": "xsd:string"
+    },
+    "CredentialInfo": "unity:CredentialInfo",
+    "aws_iam_role": {
+      "@id": "unity:aws_iam_role",
+      "@type": "@id"
+    },
+    "purpose": {
+      "@id": "unity:purpose",
+      "@type": "@id"
+    },
+    "CreateCredentialRequest": "unity:CreateCredentialRequest",
+    "UpdateCredentialRequest": "unity:UpdateCredentialRequest",
+    "AwsIamRoleRequest": "unity:AwsIamRoleRequest",
+    "role_arn": {
+      "@id": "unity:role_arn",
+      "@type": "@id"
+    },
+    "AwsIamRoleResponse": "unity:AwsIamRoleResponse",
+    "unity_catalog_iam_arn": {
+      "@id": "unity:unity_catalog_iam_arn",
+      "@type": "xsd:string"
+    },
+    "external_id": {
+      "@id": "unity:external_id",
+      "@type": "xsd:string"
+    },
+    "ListCredentialsResponse": "unity:ListCredentialsResponse",
+    "credentials": {
+      "@id": "unity:credentials",
+      "@container": "@list"
+    },
+    "CredentialPurpose": "unity:CredentialPurpose",
+    "ExternalLocationInfo": "unity:ExternalLocationInfo",
+    "credential_name": {
+      "@id": "unity:credential_name",
+      "@type": "xsd:string"
+    },
+    "credential_id": {
+      "@id": "unity:credential_id",
+      "@type": "xsd:string"
+    },
+    "CreateExternalLocation": "unity:CreateExternalLocation",
+    "UpdateExternalLocation": "unity:UpdateExternalLocation",
+    "ListExternalLocationsResponse": "unity:ListExternalLocationsResponse",
+    "external_locations": {
+      "@id": "unity:external_locations",
+      "@container": "@list"
+    },
+    "DeltaCommit": "unity:DeltaCommit",
+    "table_uri": {
+      "@id": "unity:table_uri",
+      "@type": "xsd:string"
+    },
+    "commit_info": {
+      "@id": "unity:commit_info",
+      "@type": "@id"
+    },
+    "latest_backfilled_version": {
+      "@id": "unity:latest_backfilled_version",
+      "@type": "xsd:integer"
+    },
+    "metadata": {
+      "@id": "unity:metadata",
+      "@type": "@id"
+    },
+    "uniform": {
+      "@id": "unity:uniform",
+      "@type": "@id"
+    },
+    "DeltaMetadata": "unity:DeltaMetadata",
+    "description": {
+      "@id": "unity:description",
+      "@type": "xsd:string"
+    },
+    "DeltaCommitMetadataProperties": "unity:DeltaCommitMetadataProperties",
+    "ColumnInfos": "unity:ColumnInfos",
+    "DeltaCommitInfo": "unity:DeltaCommitInfo",
+    "timestamp": {
+      "@id": "unity:timestamp",
+      "@type": "xsd:integer"
+    },
+    "file_name": {
+      "@id": "unity:file_name",
+      "@type": "xsd:string"
+    },
+    "file_size": {
+      "@id": "unity:file_size",
+      "@type": "xsd:integer"
+    },
+    "file_modification_timestamp": {
+      "@id": "unity:file_modification_timestamp",
+      "@type": "xsd:integer"
+    },
+    "DeltaUniform": "unity:DeltaUniform",
+    "iceberg": {
+      "@id": "unity:iceberg",
+      "@type": "@id"
+    },
+    "DeltaUniformIceberg": "unity:DeltaUniformIceberg",
+    "metadata_location": {
+      "@id": "unity:metadata_location",
+      "@type": "@id"
+    },
+    "converted_delta_version": {
+      "@id": "unity:converted_delta_version",
+      "@type": "xsd:integer"
+    },
+    "converted_delta_timestamp": {
+      "@id": "unity:converted_delta_timestamp",
+      "@type": "xsd:string"
+    },
+    "base_converted_delta_version": {
+      "@id": "unity:base_converted_delta_version",
+      "@type": "xsd:integer"
+    },
+    "DeltaGetCommits": "unity:DeltaGetCommits",
+    "start_version": {
+      "@id": "unity:start_version",
+      "@type": "xsd:integer"
+    },
+    "end_version": {
+      "@id": "unity:end_version",
+      "@type": "xsd:integer"
+    },
+    "DeltaGetCommitsResponse": "unity:DeltaGetCommitsResponse",
+    "commits": {
+      "@id": "unity:commits",
+      "@container": "@list"
+    },
+    "latest_table_version": {
+      "@id": "unity:latest_table_version",
+      "@type": "xsd:integer"
+    }
+  },
+  "@type": "schema:Dataset",
+  "schema:name": "Unity Catalog API JSON-LD context",
+  "schema:description": "A JSON-LD @context for the objects Unity Catalog's own API contract declares: one class per component schema, one property per declared field, typed from the contract. Derived by script (derive-json-ld.py, 2026-10-13) from openapi/unitycatalog-all.yaml.",
+  "dcterms:created": "2026-10-13",
+  "dcterms:source": [
+    "openapi/unitycatalog-all.yaml"
+  ]
+}

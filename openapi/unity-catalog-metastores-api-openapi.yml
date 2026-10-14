@@ -1,0 +1,34 @@
+openapi: 3.2.0
+info:
+  title: Unity Catalog Metastores API
+  version: '0.1'
+  description: A metastore is the top-level container of objects in Unity Catalog that stores all UC assets.
+servers:
+- url: http://localhost:8080/api/2.1/unity-catalog
+  description: Localhost reference server
+tags:
+- name: Metastores
+  description: A metastore is the top-level container of objects in Unity Catalog that stores all UC assets.
+paths:
+  /metastore_summary:
+    get:
+      tags:
+      - Metastores
+      operationId: summary
+      summary: Get metastore summary
+      description: Gets information about the metastore hosted by this Unity Catalog service (currently the service hosts only one metastore)
+      responses:
+        '200':
+          description: The metastore summary was successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetMetastoreSummaryResponse'
+components:
+  schemas:
+    GetMetastoreSummaryResponse:
+      type: object
+      properties:
+        metastore_id:
+          description: Unique identifier of the metastore.
+          type: string
