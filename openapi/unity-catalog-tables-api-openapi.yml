@@ -197,6 +197,50 @@ components:
 
             '
           type: string
+    StagingTableInfo:
+      type: object
+      properties:
+        name:
+          description: Name of table, relative to parent schema.
+          type: string
+        catalog_name:
+          description: Name of parent catalog.
+          type: string
+        schema_name:
+          description: Name of parent schema relative to its parent catalog.
+          type: string
+        id:
+          description: Unique identifier for the table.
+          type: string
+        staging_location:
+          description: URI generated for the staging table
+          type: string
+    ColumnTypeName:
+      description: Name of type (INT, STRUCT, MAP, etc.).
+      type: string
+      enum:
+      - BOOLEAN
+      - BYTE
+      - SHORT
+      - INT
+      - LONG
+      - FLOAT
+      - DOUBLE
+      - DATE
+      - TIMESTAMP
+      - TIMESTAMP_NTZ
+      - STRING
+      - BINARY
+      - DECIMAL
+      - INTERVAL
+      - ARRAY
+      - STRUCT
+      - MAP
+      - VARIANT
+      - CHAR
+      - 'NULL'
+      - USER_DEFINED_TYPE
+      - TABLE_TYPE
     DependencyList:
       description: A list of dependencies.
       type: object
@@ -206,6 +250,14 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Dependency'
+    Dependency:
+      description: A dependency of a SQL object. Either the __table__ field or the __function__ field must be defined.
+      type: object
+      properties:
+        table:
+          $ref: '#/components/schemas/TableDependency'
+        function:
+          $ref: '#/components/schemas/FunctionDependency'
     FunctionDependency:
       description: A function that is dependent on a SQL object.
       type: object
@@ -255,6 +307,83 @@ components:
       - schema_name
       - table_type
       - columns
+    CreateStagingTable:
+      type: object
+      properties:
+        name:
+          description: Name of table, relative to parent schema.
+          type: string
+        catalog_name:
+          description: Name of parent catalog.
+          type: string
+        schema_name:
+          description: Name of parent schema relative to its parent catalog.
+          type: string
+      required:
+      - name
+      - catalog_name
+      - schema_name
+    ColumnInfo:
+      type: object
+      properties:
+        name:
+          description: Name of Column.
+          type: string
+        type_text:
+          description: Full data type specification as SQL/catalogString text.
+          type: string
+        type_json:
+          description: Full data type specification, JSON-serialized.
+          type: string
+        type_name:
+          $ref: '#/components/schemas/ColumnTypeName'
+        type_precision:
+          description: Digits of precision; required for DecimalTypes.
+          type: integer
+          format: int32
+        type_scale:
+          description: Digits to right of decimal; Required for DecimalTypes.
+          type: integer
+          format: int32
+        type_interval_type:
+          description: Format of IntervalType.
+          type: string
+        position:
+          description: Ordinal position of column (starting at position 0).
+          type: integer
+          format: int32
+        comment:
+          description: User-provided free-form text description.
+          type: string
+        nullable:
+          description: Whether field may be Null.
+          type: boolean
+          default: 'true'
+        partition_index:
+          description: Partition index for column.
+          type: integer
+          format: int32
+    DataSourceFormat:
+      description: Data source format
+      type: string
+      enum:
+      - DELTA
+      - ICEBERG
+      - CSV
+      - JSON
+      - AVRO
+      - PARQUET
+      - ORC
+      - TEXT
+    TableType:
+      type: string
+      enum:
+      - MANAGED
+      - EXTERNAL
+      - STREAMING_TABLE
+      - MATERIALIZED_VIEW
+      - METRIC_VIEW
+      - VIEW
     TableInfo:
       type: object
       properties:
@@ -309,98 +438,6 @@ components:
           type: string
         view_dependencies:
           $ref: '#/components/schemas/DependencyList'
-    Dependency:
-      description: A dependency of a SQL object. Either the __table__ field or the __function__ field must be defined.
-      type: object
-      properties:
-        table:
-          $ref: '#/components/schemas/TableDependency'
-        function:
-          $ref: '#/components/schemas/FunctionDependency'
-    ColumnInfo:
-      type: object
-      properties:
-        name:
-          description: Name of Column.
-          type: string
-        type_text:
-          description: Full data type specification as SQL/catalogString text.
-          type: string
-        type_json:
-          description: Full data type specification, JSON-serialized.
-          type: string
-        type_name:
-          $ref: '#/components/schemas/ColumnTypeName'
-        type_precision:
-          description: Digits of precision; required for DecimalTypes.
-          type: integer
-          format: int32
-        type_scale:
-          description: Digits to right of decimal; Required for DecimalTypes.
-          type: integer
-          format: int32
-        type_interval_type:
-          description: Format of IntervalType.
-          type: string
-        position:
-          description: Ordinal position of column (starting at position 0).
-          type: integer
-          format: int32
-        comment:
-          description: User-provided free-form text description.
-          type: string
-        nullable:
-          description: Whether field may be Null.
-          type: boolean
-          default: 'true'
-        partition_index:
-          description: Partition index for column.
-          type: integer
-          format: int32
-    SecurablePropertiesMap:
-      description: A map of key-value properties attached to the securable.
-      type: object
-      additionalProperties:
-        type: string
-    DataSourceFormat:
-      description: Data source format
-      type: string
-      enum:
-      - DELTA
-      - ICEBERG
-      - CSV
-      - JSON
-      - AVRO
-      - PARQUET
-      - ORC
-      - TEXT
-    TableType:
-      type: string
-      enum:
-      - MANAGED
-      - EXTERNAL
-      - STREAMING_TABLE
-      - MATERIALIZED_VIEW
-      - METRIC_VIEW
-      - VIEW
-    StagingTableInfo:
-      type: object
-      properties:
-        name:
-          description: Name of table, relative to parent schema.
-          type: string
-        catalog_name:
-          description: Name of parent catalog.
-          type: string
-        schema_name:
-          description: Name of parent schema relative to its parent catalog.
-          type: string
-        id:
-          description: Unique identifier for the table.
-          type: string
-        staging_location:
-          description: URI generated for the staging table
-          type: string
     TableDependency:
       description: A table that is dependent on a SQL object.
       type: object
@@ -410,45 +447,8 @@ components:
         table_full_name:
           description: Full name of the dependent table, in the form of __catalog_name__.__schema_name__.__table_name__.
           type: string
-    ColumnTypeName:
-      description: Name of type (INT, STRUCT, MAP, etc.).
-      type: string
-      enum:
-      - BOOLEAN
-      - BYTE
-      - SHORT
-      - INT
-      - LONG
-      - FLOAT
-      - DOUBLE
-      - DATE
-      - TIMESTAMP
-      - TIMESTAMP_NTZ
-      - STRING
-      - BINARY
-      - DECIMAL
-      - INTERVAL
-      - ARRAY
-      - STRUCT
-      - MAP
-      - VARIANT
-      - CHAR
-      - 'NULL'
-      - USER_DEFINED_TYPE
-      - TABLE_TYPE
-    CreateStagingTable:
+    SecurablePropertiesMap:
+      description: A map of key-value properties attached to the securable.
       type: object
-      properties:
-        name:
-          description: Name of table, relative to parent schema.
-          type: string
-        catalog_name:
-          description: Name of parent catalog.
-          type: string
-        schema_name:
-          description: Name of parent schema relative to its parent catalog.
-          type: string
-      required:
-      - name
-      - catalog_name
-      - schema_name
+      additionalProperties:
+        type: string

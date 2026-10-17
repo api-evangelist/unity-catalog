@@ -125,69 +125,6 @@ paths:
               schema: {}
 components:
   schemas:
-    DependencyList:
-      description: A list of dependencies.
-      type: object
-      properties:
-        dependencies:
-          description: Array of dependencies.
-          type: array
-          items:
-            $ref: '#/components/schemas/Dependency'
-    FunctionParameterInfo:
-      type: object
-      required:
-      - name
-      - type_text
-      - type_name
-      - type_json
-      - position
-      properties:
-        name:
-          description: Name of parameter.
-          type: string
-        type_text:
-          description: Full data type spec, SQL/catalogString text.
-          type: string
-        type_json:
-          description: Full data type spec, JSON-serialized.
-          type: string
-        type_name:
-          $ref: '#/components/schemas/ColumnTypeName'
-        type_precision:
-          description: Digits of precision; required on Create for DecimalTypes.
-          type: integer
-          format: int32
-        type_scale:
-          description: Digits to right of decimal; Required on Create for DecimalTypes.
-          type: integer
-          format: int32
-        type_interval_type:
-          description: Format of IntervalType.
-          type: string
-        position:
-          description: Ordinal position of column (starting at position 0).
-          type: integer
-          format: int32
-        parameter_mode:
-          $ref: '#/components/schemas/FunctionParameterMode'
-        parameter_type:
-          $ref: '#/components/schemas/FunctionParameterType'
-        parameter_default:
-          description: Default value of the parameter.
-          type: string
-        comment:
-          description: User-provided free-form text description.
-          type: string
-    FunctionDependency:
-      description: A function that is dependent on a SQL object.
-      type: object
-      required:
-      - function_full_name
-      properties:
-        function_full_name:
-          description: Full name of the dependent function, in the form of __catalog_name__.__schema_name__.__function_name__.
-          type: string
     FunctionInfo:
       type: object
       properties:
@@ -278,41 +215,6 @@ components:
         external_language:
           description: External language of the function.
           type: string
-    Dependency:
-      description: A dependency of a SQL object. Either the __table__ field or the __function__ field must be defined.
-      type: object
-      properties:
-        table:
-          $ref: '#/components/schemas/TableDependency'
-        function:
-          $ref: '#/components/schemas/FunctionDependency'
-    ListFunctionsResponse:
-      type: object
-      properties:
-        functions:
-          description: An array of function information objects.
-          type: array
-          items:
-            $ref: '#/components/schemas/FunctionInfo'
-        next_page_token:
-          type: string
-          description: 'Opaque token to retrieve the next page of results. Absent if there are no more pages.
-
-            __page_token__ should be set to this value for the next request (for the next page of results).
-
-            '
-    CreateFunctionRequest:
-      type: object
-      properties:
-        function_info:
-          $ref: '#/components/schemas/CreateFunction'
-      required:
-      - function_info
-    FunctionParameterMode:
-      description: The mode of the function parameter.
-      type: string
-      enum:
-      - IN
     FunctionParameterType:
       description: The type of function parameter.
       type: string
@@ -401,23 +303,97 @@ components:
         external_language:
           description: External language of the function.
           type: string
-    FunctionParameterInfos:
+    ListFunctionsResponse:
       type: object
       properties:
-        parameters:
-          description: The array of __FunctionParameterInfo__ definitions of the function's parameters.
+        functions:
+          description: An array of function information objects.
           type: array
           items:
-            $ref: '#/components/schemas/FunctionParameterInfo'
-    TableDependency:
-      description: A table that is dependent on a SQL object.
+            $ref: '#/components/schemas/FunctionInfo'
+        next_page_token:
+          type: string
+          description: 'Opaque token to retrieve the next page of results. Absent if there are no more pages.
+
+            __page_token__ should be set to this value for the next request (for the next page of results).
+
+            '
+    Dependency:
+      description: A dependency of a SQL object. Either the __table__ field or the __function__ field must be defined.
+      type: object
+      properties:
+        table:
+          $ref: '#/components/schemas/TableDependency'
+        function:
+          $ref: '#/components/schemas/FunctionDependency'
+    DependencyList:
+      description: A list of dependencies.
+      type: object
+      properties:
+        dependencies:
+          description: Array of dependencies.
+          type: array
+          items:
+            $ref: '#/components/schemas/Dependency'
+    FunctionDependency:
+      description: A function that is dependent on a SQL object.
       type: object
       required:
-      - table_full_name
+      - function_full_name
       properties:
-        table_full_name:
-          description: Full name of the dependent table, in the form of __catalog_name__.__schema_name__.__table_name__.
+        function_full_name:
+          description: Full name of the dependent function, in the form of __catalog_name__.__schema_name__.__function_name__.
           type: string
+    FunctionParameterInfo:
+      type: object
+      required:
+      - name
+      - type_text
+      - type_name
+      - type_json
+      - position
+      properties:
+        name:
+          description: Name of parameter.
+          type: string
+        type_text:
+          description: Full data type spec, SQL/catalogString text.
+          type: string
+        type_json:
+          description: Full data type spec, JSON-serialized.
+          type: string
+        type_name:
+          $ref: '#/components/schemas/ColumnTypeName'
+        type_precision:
+          description: Digits of precision; required on Create for DecimalTypes.
+          type: integer
+          format: int32
+        type_scale:
+          description: Digits to right of decimal; Required on Create for DecimalTypes.
+          type: integer
+          format: int32
+        type_interval_type:
+          description: Format of IntervalType.
+          type: string
+        position:
+          description: Ordinal position of column (starting at position 0).
+          type: integer
+          format: int32
+        parameter_mode:
+          $ref: '#/components/schemas/FunctionParameterMode'
+        parameter_type:
+          $ref: '#/components/schemas/FunctionParameterType'
+        parameter_default:
+          description: Default value of the parameter.
+          type: string
+        comment:
+          description: User-provided free-form text description.
+          type: string
+    FunctionParameterMode:
+      description: The mode of the function parameter.
+      type: string
+      enum:
+      - IN
     ColumnTypeName:
       description: Name of type (INT, STRUCT, MAP, etc.).
       type: string
@@ -444,3 +420,27 @@ components:
       - 'NULL'
       - USER_DEFINED_TYPE
       - TABLE_TYPE
+    FunctionParameterInfos:
+      type: object
+      properties:
+        parameters:
+          description: The array of __FunctionParameterInfo__ definitions of the function's parameters.
+          type: array
+          items:
+            $ref: '#/components/schemas/FunctionParameterInfo'
+    CreateFunctionRequest:
+      type: object
+      properties:
+        function_info:
+          $ref: '#/components/schemas/CreateFunction'
+      required:
+      - function_info
+    TableDependency:
+      description: A table that is dependent on a SQL object.
+      type: object
+      required:
+      - table_full_name
+      properties:
+        table_full_name:
+          description: Full name of the dependent table, in the form of __catalog_name__.__schema_name__.__table_name__.
+          type: string

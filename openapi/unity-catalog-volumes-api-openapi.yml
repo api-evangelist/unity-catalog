@@ -234,6 +234,39 @@ paths:
               schema: {}
 components:
   schemas:
+    VolumeType:
+      type: string
+      enum:
+      - MANAGED
+      - EXTERNAL
+      description: The type of the volume
+    CreateVolumeRequestContent:
+      type: object
+      properties:
+        catalog_name:
+          type: string
+          description: The name of the catalog where the schema and the volume are
+        schema_name:
+          type: string
+          description: The name of the schema where the volume is
+        name:
+          type: string
+          description: The name of the volume
+        volume_type:
+          $ref: '#/components/schemas/VolumeType'
+        comment:
+          type: string
+          maxLength: 65536
+          minLength: 1
+          description: The comment attached to the volume
+        storage_location:
+          type: string
+          description: The storage location of the volume
+      required:
+      - catalog_name
+      - schema_name
+      - name
+      - volume_type
     UpdateVolumeRequestContent:
       type: object
       properties:
@@ -245,26 +278,6 @@ components:
         new_name:
           description: New name for the volume.
           type: string
-    ListVolumesResponseContent:
-      type: object
-      properties:
-        volumes:
-          type: array
-          items:
-            $ref: '#/components/schemas/VolumeInfo'
-        next_page_token:
-          description: 'Opaque token to retrieve the next page of results. Absent if there are no more pages.
-
-            __page_token__ should be set to this value for the next request to retrieve the next page of results.
-
-            '
-          type: string
-    VolumeType:
-      type: string
-      enum:
-      - MANAGED
-      - EXTERNAL
-      description: The type of the volume
     VolumeInfo:
       type: object
       properties:
@@ -310,30 +323,17 @@ components:
         full_name:
           type: string
           description: Full name of volume, in form of __catalog_name__.__schema_name__.__volume_name__.
-    CreateVolumeRequestContent:
+    ListVolumesResponseContent:
       type: object
       properties:
-        catalog_name:
+        volumes:
+          type: array
+          items:
+            $ref: '#/components/schemas/VolumeInfo'
+        next_page_token:
+          description: 'Opaque token to retrieve the next page of results. Absent if there are no more pages.
+
+            __page_token__ should be set to this value for the next request to retrieve the next page of results.
+
+            '
           type: string
-          description: The name of the catalog where the schema and the volume are
-        schema_name:
-          type: string
-          description: The name of the schema where the volume is
-        name:
-          type: string
-          description: The name of the volume
-        volume_type:
-          $ref: '#/components/schemas/VolumeType'
-        comment:
-          type: string
-          maxLength: 65536
-          minLength: 1
-          description: The comment attached to the volume
-        storage_location:
-          type: string
-          description: The storage location of the volume
-      required:
-      - catalog_name
-      - schema_name
-      - name
-      - volume_type

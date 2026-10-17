@@ -145,34 +145,6 @@ paths:
               schema: {}
 components:
   schemas:
-    UpdateRegisteredModel:
-      type: object
-      properties:
-        comment:
-          description: User-provided free-form text description.
-          type: string
-        new_name:
-          description: New name for the model.
-          type: string
-    CreateRegisteredModel:
-      type: object
-      properties:
-        name:
-          description: Name of model, relative to parent schema.
-          type: string
-        catalog_name:
-          description: Name of parent catalog.
-          type: string
-        schema_name:
-          description: Name of parent schema relative to its parent catalog.
-          type: string
-        comment:
-          description: User-provided free-form text description.
-          type: string
-      required:
-      - name
-      - catalog_name
-      - schema_name
     RegisteredModelInfo:
       type: object
       properties:
@@ -214,6 +186,15 @@ components:
         id:
           description: Unique identifier for the registered model.
           type: string
+    UpdateRegisteredModel:
+      type: object
+      properties:
+        comment:
+          description: User-provided free-form text description.
+          type: string
+        new_name:
+          description: New name for the model.
+          type: string
     ListRegisteredModelsResponse:
       type: object
       properties:
@@ -229,3 +210,22 @@ components:
             __page_token__ should be set to this value for the next request (for the next page of results).
 
             '
+    CreateRegisteredModel:
+      type: object
+      properties:
+        name:
+          description: Name of model, relative to parent schema.
+          type: string
+        catalog_name:
+          description: Name of parent catalog.
+          type: string
+        schema_name:
+          description: Name of parent schema relative to its parent catalog.
+          type: string
+        comment:
+          description: User-provided free-form text description.
+          type: string
+      required:
+      - name
+      - catalog_name
+      - schema_name

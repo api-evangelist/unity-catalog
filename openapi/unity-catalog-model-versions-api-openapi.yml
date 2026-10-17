@@ -171,51 +171,6 @@ paths:
                 $ref: '#/components/schemas/ModelVersionInfo'
 components:
   schemas:
-    CreateModelVersion:
-      type: object
-      properties:
-        model_name:
-          description: Name of registered model, relative to parent schema.
-          type: string
-        catalog_name:
-          description: Name of parent catalog.
-          type: string
-        schema_name:
-          description: Name of parent schema relative to its parent catalog.
-          type: string
-        source:
-          description: URI indicating the location of the source model artifacts.
-          type: string
-        run_id:
-          description: The run id used by the ML package that generated the model.
-          type: string
-        comment:
-          description: User-provided free-form text description.
-          type: string
-      required:
-      - model_name
-      - catalog_name
-      - schema_name
-      - source
-    UpdateModelVersion:
-      type: object
-      properties:
-        comment:
-          description: User-provided free-form text description.
-          type: string
-    ModelVersionStatus:
-      description: All possible model version statuses.
-      type: string
-      enum:
-      - MODEL_VERSION_STATUS_UNKNOWN
-      - PENDING_REGISTRATION
-      - FAILED_REGISTRATION
-      - READY
-      x-enum-descriptions:
-      - 'MODEL_VERSION_STATUS_UNKNOWN: Unknown'
-      - 'PENDING_REGISTRATION: Indicates that the client has not completely written all model artifacts to external storage.'
-      - 'FAILED_REGISTRATION: Indicates that the client has failed to write all model artifacts to external storage.'
-      - 'READY: Indicates that the client has successfully written all model artifacts to external storage.'
     FinalizeModelVersion:
       type: object
       properties:
@@ -290,4 +245,49 @@ components:
           type: string
         id:
           description: Unique identifier for the model version.
+          type: string
+    CreateModelVersion:
+      type: object
+      properties:
+        model_name:
+          description: Name of registered model, relative to parent schema.
+          type: string
+        catalog_name:
+          description: Name of parent catalog.
+          type: string
+        schema_name:
+          description: Name of parent schema relative to its parent catalog.
+          type: string
+        source:
+          description: URI indicating the location of the source model artifacts.
+          type: string
+        run_id:
+          description: The run id used by the ML package that generated the model.
+          type: string
+        comment:
+          description: User-provided free-form text description.
+          type: string
+      required:
+      - model_name
+      - catalog_name
+      - schema_name
+      - source
+    ModelVersionStatus:
+      description: All possible model version statuses.
+      type: string
+      enum:
+      - MODEL_VERSION_STATUS_UNKNOWN
+      - PENDING_REGISTRATION
+      - FAILED_REGISTRATION
+      - READY
+      x-enum-descriptions:
+      - 'MODEL_VERSION_STATUS_UNKNOWN: Unknown'
+      - 'PENDING_REGISTRATION: Indicates that the client has not completely written all model artifacts to external storage.'
+      - 'FAILED_REGISTRATION: Indicates that the client has failed to write all model artifacts to external storage.'
+      - 'READY: Indicates that the client has successfully written all model artifacts to external storage.'
+    UpdateModelVersion:
+      type: object
+      properties:
+        comment:
+          description: User-provided free-form text description.
           type: string

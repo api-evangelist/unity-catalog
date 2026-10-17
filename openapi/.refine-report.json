@@ -1,7 +1,7 @@
 {
   "provider": "unity-catalog",
   "sources": [
-    "unitycatalog-all.yaml"
+    "_original/unitycatalog-all.yaml"
   ],
   "outputs": [
     "unity-catalog-catalogs-api-openapi.yml",
@@ -19,16 +19,32 @@
     "unity-catalog-volumes-api-openapi.yml"
   ],
   "archived": [
-    "archived openapi/unitycatalog-all.yaml"
+    "deleted 2 superseded output(s) from the previous generation"
   ],
   "errors": [],
   "warnings": [],
   "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
     "unitycatalog-all.yaml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
     "unitycatalog-all.yaml: declared missing tag: Credentials",
     "unitycatalog-all.yaml: declared missing tag: External Locations",
     "unitycatalog-all.yaml: declared missing tag: Grants",
-    "apis.yml register: written (+13 apis, 13 total)"
+    "superseded outputs removed: unity-catalog-model-versions-api-openapi.yml, unity-catalog-registered-models-api-openapi.yml",
+    "apis.yml register: written (+2 apis, 13 total)"
   ],
-  "skipped": []
+  "skipped": [
+    "unity-catalog-catalogs-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "unity-catalog-credentials-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "unity-catalog-deltacommits-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "unity-catalog-external-locations-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "unity-catalog-functions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "unity-catalog-grants-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "unity-catalog-metastores-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "unity-catalog-model-versions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "unity-catalog-registered-models-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "unity-catalog-schemas-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "unity-catalog-tables-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "unity-catalog-temporarycredentials-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "unity-catalog-volumes-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

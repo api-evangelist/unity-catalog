@@ -64,6 +64,53 @@ paths:
                 $ref: '#/components/schemas/PermissionsList'
 components:
   schemas:
+    SecurableType:
+      type: string
+      enum:
+      - metastore
+      - catalog
+      - schema
+      - table
+      - function
+      - volume
+      - registered_model
+      - external_location
+      - credential
+      description: The type of the resource.
+    UpdatePermissions:
+      type: object
+      properties:
+        changes:
+          description: Array of permissions change objects.
+          type: array
+          items:
+            $ref: '#/components/schemas/PermissionsChange'
+      required:
+      - changes
+    PermissionsList:
+      type: object
+      properties:
+        privilege_assignments:
+          description: The privileges assigned to each principal.
+          type: array
+          items:
+            $ref: '#/components/schemas/PrivilegeAssignment'
+      required:
+      - privilege_assignments
+    PrivilegeAssignment:
+      type: object
+      properties:
+        principal:
+          description: The principal (user email address or group name).
+          type: string
+        privileges:
+          description: The privileges assigned to the principal.
+          type: array
+          items:
+            $ref: '#/components/schemas/Privilege'
+      required:
+      - principal
+      - privileges
     PermissionsChange:
       type: object
       properties:
@@ -127,50 +174,3 @@ components:
       - 'CREATE EXTERNAL VOLUME: Enables creating external volumes through external locations.'
       - 'CREATE MANAGED STORAGE: Allows designating managed storage locations at catalog or schema levels.'
       - 'CREATE STORAGE CREDENTIAL: Required privilege on the metastore to create storage credentials.'
-    PrivilegeAssignment:
-      type: object
-      properties:
-        principal:
-          description: The principal (user email address or group name).
-          type: string
-        privileges:
-          description: The privileges assigned to the principal.
-          type: array
-          items:
-            $ref: '#/components/schemas/Privilege'
-      required:
-      - principal
-      - privileges
-    SecurableType:
-      type: string
-      enum:
-      - metastore
-      - catalog
-      - schema
-      - table
-      - function
-      - volume
-      - registered_model
-      - external_location
-      - credential
-      description: The type of the resource.
-    PermissionsList:
-      type: object
-      properties:
-        privilege_assignments:
-          description: The privileges assigned to each principal.
-          type: array
-          items:
-            $ref: '#/components/schemas/PrivilegeAssignment'
-      required:
-      - privilege_assignments
-    UpdatePermissions:
-      type: object
-      properties:
-        changes:
-          description: Array of permissions change objects.
-          type: array
-          items:
-            $ref: '#/components/schemas/PermissionsChange'
-      required:
-      - changes

@@ -146,26 +146,6 @@ components:
         new_name:
           description: New name for the schema.
           type: string
-    ListSchemasResponse:
-      type: object
-      properties:
-        schemas:
-          description: An array of schema information objects.
-          type: array
-          items:
-            $ref: '#/components/schemas/SchemaInfo'
-        next_page_token:
-          type: string
-          description: 'Opaque token to retrieve the next page of results. Absent if there are no more pages.
-
-            __page_token__ should be set to this value for the next request (for the next page of results).
-
-            '
-    SecurablePropertiesMap:
-      description: A map of key-value properties attached to the securable.
-      type: object
-      additionalProperties:
-        type: string
     SchemaInfo:
       type: object
       properties:
@@ -221,6 +201,21 @@ components:
 
             '
           type: string
+    ListSchemasResponse:
+      type: object
+      properties:
+        schemas:
+          description: An array of schema information objects.
+          type: array
+          items:
+            $ref: '#/components/schemas/SchemaInfo'
+        next_page_token:
+          type: string
+          description: 'Opaque token to retrieve the next page of results. Absent if there are no more pages.
+
+            __page_token__ should be set to this value for the next request (for the next page of results).
+
+            '
     CreateSchema:
       type: object
       properties:
@@ -247,3 +242,8 @@ components:
       required:
       - name
       - catalog_name
+    SecurablePropertiesMap:
+      description: A map of key-value properties attached to the securable.
+      type: object
+      additionalProperties:
+        type: string

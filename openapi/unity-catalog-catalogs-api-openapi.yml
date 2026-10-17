@@ -127,55 +127,6 @@ paths:
               schema: {}
 components:
   schemas:
-    ListCatalogsResponse:
-      type: object
-      properties:
-        catalogs:
-          description: An array of catalog information objects.
-          type: array
-          items:
-            $ref: '#/components/schemas/CatalogInfo'
-        next_page_token:
-          type: string
-          description: 'Opaque token to retrieve the next page of results. Absent if there are no more pages.
-
-            __page_token__ should be set to this value for the next request (for the next page of results).
-
-            '
-    CreateCatalog:
-      type: object
-      properties:
-        name:
-          description: Name of catalog.
-          type: string
-        comment:
-          description: User-provided free-form text description.
-          type: string
-        properties:
-          $ref: '#/components/schemas/SecurablePropertiesMap'
-        storage_root:
-          description: 'Storage root URL for managed storage location of catalog. Example: s3://bucket/ucroot
-
-            '
-          type: string
-      required:
-      - name
-    SecurablePropertiesMap:
-      description: A map of key-value properties attached to the securable.
-      type: object
-      additionalProperties:
-        type: string
-    UpdateCatalog:
-      type: object
-      properties:
-        comment:
-          description: User-provided free-form text description.
-          type: string
-        properties:
-          $ref: '#/components/schemas/SecurablePropertiesMap'
-        new_name:
-          description: New name for the catalog.
-          type: string
     CatalogInfo:
       type: object
       properties:
@@ -223,3 +174,52 @@ components:
 
             '
           type: string
+    UpdateCatalog:
+      type: object
+      properties:
+        comment:
+          description: User-provided free-form text description.
+          type: string
+        properties:
+          $ref: '#/components/schemas/SecurablePropertiesMap'
+        new_name:
+          description: New name for the catalog.
+          type: string
+    ListCatalogsResponse:
+      type: object
+      properties:
+        catalogs:
+          description: An array of catalog information objects.
+          type: array
+          items:
+            $ref: '#/components/schemas/CatalogInfo'
+        next_page_token:
+          type: string
+          description: 'Opaque token to retrieve the next page of results. Absent if there are no more pages.
+
+            __page_token__ should be set to this value for the next request (for the next page of results).
+
+            '
+    CreateCatalog:
+      type: object
+      properties:
+        name:
+          description: Name of catalog.
+          type: string
+        comment:
+          description: User-provided free-form text description.
+          type: string
+        properties:
+          $ref: '#/components/schemas/SecurablePropertiesMap'
+        storage_root:
+          description: 'Storage root URL for managed storage location of catalog. Example: s3://bucket/ucroot
+
+            '
+          type: string
+      required:
+      - name
+    SecurablePropertiesMap:
+      description: A map of key-value properties attached to the securable.
+      type: object
+      additionalProperties:
+        type: string

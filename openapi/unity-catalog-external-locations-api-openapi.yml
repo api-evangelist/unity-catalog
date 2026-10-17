@@ -116,6 +116,54 @@ paths:
                 $ref: '#/components/schemas/ExternalLocationInfo'
 components:
   schemas:
+    UpdateExternalLocation:
+      type: object
+      properties:
+        url:
+          description: Path URL of the external location.
+          type: string
+        credential_name:
+          description: Name of the storage credential used with this location.
+          type: string
+        comment:
+          description: User-provided free-form text description.
+          type: string
+        owner:
+          description: The owner of the external location.
+          type: string
+        new_name:
+          description: New name for the external location.
+          type: string
+    ListExternalLocationsResponse:
+      type: object
+      properties:
+        external_locations:
+          description: An array of external locations.
+          type: array
+          items:
+            $ref: '#/components/schemas/ExternalLocationInfo'
+        next_page_token:
+          type: string
+          description: Opaque token to retrieve the next page of results. Absent if there are no more pages. __page_token__ should be set to this value for the next request (for the next page of results).
+    CreateExternalLocation:
+      type: object
+      required:
+      - name
+      - url
+      - credential_name
+      properties:
+        name:
+          description: Name of the external location.
+          type: string
+        url:
+          description: Path URL of the external location.
+          type: string
+        credential_name:
+          description: Name of the storage credential used with this location.
+          type: string
+        comment:
+          description: User-provided free-form text description.
+          type: string
     ExternalLocationInfo:
       type: object
       properties:
@@ -154,51 +202,3 @@ components:
         updated_by:
           description: Username of user who last modified the external location.
           type: string
-    UpdateExternalLocation:
-      type: object
-      properties:
-        url:
-          description: Path URL of the external location.
-          type: string
-        credential_name:
-          description: Name of the storage credential used with this location.
-          type: string
-        comment:
-          description: User-provided free-form text description.
-          type: string
-        owner:
-          description: The owner of the external location.
-          type: string
-        new_name:
-          description: New name for the external location.
-          type: string
-    CreateExternalLocation:
-      type: object
-      required:
-      - name
-      - url
-      - credential_name
-      properties:
-        name:
-          description: Name of the external location.
-          type: string
-        url:
-          description: Path URL of the external location.
-          type: string
-        credential_name:
-          description: Name of the storage credential used with this location.
-          type: string
-        comment:
-          description: User-provided free-form text description.
-          type: string
-    ListExternalLocationsResponse:
-      type: object
-      properties:
-        external_locations:
-          description: An array of external locations.
-          type: array
-          items:
-            $ref: '#/components/schemas/ExternalLocationInfo'
-        next_page_token:
-          type: string
-          description: Opaque token to retrieve the next page of results. Absent if there are no more pages. __page_token__ should be set to this value for the next request (for the next page of results).
